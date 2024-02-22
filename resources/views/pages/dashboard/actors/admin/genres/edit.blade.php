@@ -9,9 +9,9 @@
     <div class="page-title">
         <div class="row">
             <div class="order-last col-12 col-md-6 order-md-1">
-                <h3>Create Genre</h3>
+                <h3>Edit Genre</h3>
                 <p class="text-subtitle text-muted">
-                    Create a new genre for the books in the library.
+                    Edit the genre for the books in the library.
                 </p>
             </div>
             <div class="order-first col-12 col-md-6 order-md-2">
@@ -19,7 +19,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="/dashboard/genres">Genre</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Create</li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit</li>
                     </ol>
                 </nav>
             </div>
@@ -31,8 +31,9 @@
                 <h4 class="card-title">Genre</h4>
             </div>
             <div class="card-body">
-                <form class="form" action="/dashboard/genres" method="POST">
+                <form class="form" action="/dashboard/genres/{{ $genre->id_genre }}" method="POST">
                     @csrf
+                    @method('PUT')
 
                     <div class="row">
                         <div class="mb-1 col-md-6 col-12">
@@ -40,7 +41,7 @@
                                 <label for="name" class="form-label">Name</label>
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" placeholder="e.g. Fiction"
-                                        id="name" name="name" value="{{ old('name') }}" />
+                                        id="name" name="name" value="{{ old('name') ?? $genre->name }}" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-pen"></i>
                                     </div>
@@ -61,7 +62,8 @@
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control"
                                         placeholder="e.g. Fiction is a form of any work designed to entertain ..."
-                                        id="description" name="description" value="{{ old('description') }}" />
+                                        id="description" name="description"
+                                        value="{{ old('description') ?? $genre->description }}" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-envelope-paper"></i>
                                     </div>

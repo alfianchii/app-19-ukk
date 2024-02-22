@@ -24,9 +24,9 @@ return new class extends Migration
             $table->string('profile_picture')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('flag_active', ["Y", "N"])->default("Y");
             $table->enum('role', ["reader", "officer", "admin"])->default("reader");
 
+            $table->enum("flag_active", ["Y", "N"])->default("Y");
             $table->string("created_by")->nullable();
             $table->string("updated_by")->nullable();
             $table->rememberToken();

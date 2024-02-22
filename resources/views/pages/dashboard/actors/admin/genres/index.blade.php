@@ -33,7 +33,53 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Genre</h4>
+                <div class="d-flex flex-column flex-md-row justify-content-between" style="row-gap: 1rem;">
+                    <h4>Genre</h4>
+
+                    <div class="mb-3 dropdown dropdown-color-icon d-flex justify-content-start">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="export"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="select-all fa-fw fas me-1"></span> Export
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="export">
+                            <form action="/dashboard/genres/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-genres">
+                                <input type="hidden" name="type" value="XLSX">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="select-all fa-fw far text-light"></span> Excel
+                                </button>
+                            </form>
+
+                            <form action="/dashboard/genres/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-genres">
+                                <input type="hidden" name="type" value="CSV">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="select-all fa-fw fas text-light"></span> CSV
+                                </button>
+                            </form>
+
+                            <form action="/dashboard/genres/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-genres">
+                                <input type="hidden" name="type" value="HTML">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="select-all fa-fw fab text-light"></span> HTML
+                                </button>
+                            </form>
+
+                            <form action="/dashboard/genres/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-genres">
+                                <input type="hidden" name="type" value="MPDF">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="select-all fa-fw far text-light"></span> PDF
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="table-genre">
@@ -44,117 +90,63 @@
                             <th>Desc</th>
                             <th>Book(s)</th>
                             <th>Created</th>
+                            <th>Active</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Action</td>
-                            <td>Action films usually include high energy, big-budget physical stunts and chases, possibly
-                                with rescues, battles, fights, escapes, destructive crises, etc.</td>
-                            <td>6</td>
-                            <td>Alfian</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/genres/1/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
+                        @forelse ($genres as $genre)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $genre->name }}</td>
+                                <td>{{ $genre->description }}</td>
+                                <td>{{ $genre->books->count() }}</td>
+                                <td>{{ $genre->createdBy->full_name }}</td>
+                                <td>
+                                    @if ($genre->flag_active == 'Y')
+                                        <span class="badge bg-light-success">Y</span>
+                                    @else
+                                        <span class="badge bg-light-danger">N</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="me-2">
+                                            <a href="/dashboard/genres/{{ $genre->id_genre }}/edit"
+                                                class="px-2 pt-2 btn btn-warning">
+                                                <span class="select-all fa-fw fa-lg fas"></span>
+                                            </a>
+                                        </div>
 
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-genre-destroy="true"
-                                            data-unique="1">
-                                            <span data-confirm-genre-destroy="true" data-unique="1"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
+                                        @if ($genre->flag_active === 'Y')
+                                            <div class="me-2">
+                                                <a class="px-2 pt-2 btn btn-danger" data-confirm-genre-destroy="true"
+                                                    data-unique="{{ $genre->id_genre }}">
+                                                    <span data-confirm-genre-destroy="true"
+                                                        data-unique="{{ $genre->id_genre }}"
+                                                        class="select-all fa-fw fa-lg fas"></span>
+                                                </a>
+                                            </div>
+                                        @else
+                                            <div class="me-2">
+                                                <a class="px-2 pt-2 btn btn-success" data-confirm-genre-activate="true"
+                                                    data-unique="{{ $genre->id_genre }}">
+                                                    <span data-confirm-genre-activate="true"
+                                                        data-unique="{{ $genre->id_genre }}"
+                                                        class="select-all fa-fw fa-lg fas"></span>
+                                                </a>
+                                            </div>
+                                        @endif
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Adventure</td>
-                            <td>Adventure films are usually exciting stories, with new experiences or exotic locales, very
-                                similar to or often paired with the action film genre.</td>
-                            <td>3</td>
-                            <td>Alfian</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/genres/2/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-genre-destroy="true"
-                                            data-unique="2">
-                                            <span data-confirm-genre-destroy="true" data-unique="2"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Comedy</td>
-                            <td>Comedy is a story that tells about a series of funny, or comical events, intended to make
-                                the audience laugh. It is a very open genre, and thus crosses over with many other genres on
-                                a regular basis.</td>
-                            <td>7</td>
-                            <td>Alfian</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/genres/3/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-genre-destroy="true"
-                                            data-unique="3">
-                                            <span data-confirm-genre-destroy="true" data-unique="3"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Drama</td>
-                            <td>Drama is a genre of narrative fiction (or semi-fiction) intended to be more serious than
-                                humorous in tone, focusing on in-depth development of realistic characters who must deal
-                                with realistic emotional struggles.</td>
-                            <td>2</td>
-                            <td>Alfian</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/genres/4/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-genre-destroy="true"
-                                            data-unique="4">
-                                            <span data-confirm-genre-destroy="true" data-unique="4"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        {{-- <tr>
-                            <td colspan="6">
-                                <p class="pt-3 text-center">Nothing :(</p>
-                            </td>
-                        </tr> --}}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6">
+                                    <p class="pt-3 text-center">Nothing :(</p>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

@@ -4,6 +4,7 @@
 
 @section('additional_links')
     @include('utils.filepond.link')
+    @include('utils.sweetalert.link')
 @endsection
 
 @section('content')
@@ -253,8 +254,17 @@
                                         Picture</label>
 
                                     @if ($user->profile_picture)
-                                        <div class="mb-3">
-                                            <img class="rounded-2" width="150"
+                                        <div class="mb-3 relative" data-confirm-user-profile-picture-destroy="true"
+                                            data-unique="{{ $user->id_user }}">
+                                            <a class="px-2 pt-2 btn btn-danger position-absolute"
+                                                data-confirm-user-profile-picture-destroy="true"
+                                                data-unique="{{ $user->id_user }}">
+                                                <span data-confirm-user-profile-picture-destroy="true"
+                                                    data-unique="{{ $user->id_user }}"
+                                                    class="select-all fa-fw fa-lg fas"></span>
+                                            </a>
+
+                                            <img class="rounded-2" width="250"
                                                 src="{{ asset('storage/' . $user->profile_picture) }}"
                                                 alt="{{ $user->full_name }}">
                                         </div>
@@ -351,6 +361,8 @@
 @section('additional_scripts')
     @include('utils.filepond.script')
     @vite('resources/js/components/filepond/image-crop/photo.js')
+    @include('utils.sweetalert.script')
+    @vite('resources/js/components/sweetalert/dashboard/users/alert.js')
 
     @include('utils.session.forget-error')
 @endsection

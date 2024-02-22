@@ -46,7 +46,7 @@
                         <div class="dropdown-menu" aria-labelledby="export">
                             <form action="/dashboard/receipts/export" method="POST">
                                 @csrf
-                                <input type="hidden" name="table" value="your-receipts">
+                                <input type="hidden" name="table" value="all-of-receipts">
                                 <input type="hidden" name="type" value="XLSX">
                                 <button type="submit" class="dropdown-item">
                                     <span class="select-all fa-fw far text-light"></span> Excel
@@ -55,7 +55,7 @@
 
                             <form action="/dashboard/receipts/export" method="POST">
                                 @csrf
-                                <input type="hidden" name="table" value="your-receipts">
+                                <input type="hidden" name="table" value="all-of-receipts">
                                 <input type="hidden" name="type" value="CSV">
                                 <button type="submit" class="dropdown-item">
                                     <span class="select-all fa-fw fas text-light"></span> CSV
@@ -64,7 +64,7 @@
 
                             <form action="/dashboard/receipts/export" method="POST">
                                 @csrf
-                                <input type="hidden" name="table" value="your-receipts">
+                                <input type="hidden" name="table" value="all-of-receipts">
                                 <input type="hidden" name="type" value="HTML">
                                 <button type="submit" class="dropdown-item">
                                     <span class="select-all fa-fw fab text-light"></span> HTML
@@ -73,7 +73,7 @@
 
                             <form action="/dashboard/receipts/export" method="POST">
                                 @csrf
-                                <input type="hidden" name="table" value="your-receipts">
+                                <input type="hidden" name="table" value="all-of-receipts">
                                 <input type="hidden" name="type" value="MPDF">
                                 <button type="submit" class="dropdown-item">
                                     <span class="select-all fa-fw far text-light"></span> PDF

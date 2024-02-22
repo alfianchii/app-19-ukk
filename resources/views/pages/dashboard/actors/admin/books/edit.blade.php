@@ -12,9 +12,9 @@
     <div class="page-title">
         <div class="row">
             <div class="order-last col-12 col-md-6 order-md-1">
-                <h3>Create Book</h3>
+                <h3>Update Book</h3>
                 <p class="text-subtitle text-muted">
-                    Create a new book in the library.
+                    Update the book in the library.
                 </p>
             </div>
             <div class="order-first col-12 col-md-6 order-md-2">
@@ -22,7 +22,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="/dashboard/books">Book</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Create</li>
+                        <li class="breadcrumb-item active" aria-current="page">Update</li>
                     </ol>
                 </nav>
             </div>
@@ -34,8 +34,10 @@
                 <h4 class="card-title">Book</h4>
             </div>
             <div class="card-body">
-                <form class="form" action="/dashboard/books" method="POST" enctype="multipart/form-data">
+                <form class="form" action="/dashboard/books/{{ $book->id_book }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
 
                     <div class="row">
                         <div class="mb-1 col-md-6 col-12">
@@ -43,7 +45,7 @@
                                 <label for="title" class="form-label">Title</label>
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" placeholder="e.g. The Midnight Library"
-                                        id="title" name="title" value="{{ old('title') }}" />
+                                        id="title" name="title" value="{{ old('title') ?? $book->title }}" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-pen"></i>
                                     </div>
@@ -62,7 +64,7 @@
                                 <label for="author" class="form-label">Author</label>
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" placeholder="e.g. Matt Haig"
-                                        id="author" name="author" value="{{ old('author') }}" />
+                                        id="author" name="author" value="{{ old('author') ?? $book->author }}" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-person"></i>
                                     </div>
@@ -81,7 +83,8 @@
                                 <label for="publisher" class="form-label">Publisher</label>
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" placeholder="e.g. Penguin Books"
-                                        id="publisher" name="publisher" value="{{ old('publisher') }}" />
+                                        id="publisher" name="publisher"
+                                        value="{{ old('publisher') ?? $book->publisher }}" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-globe"></i>
                                     </div>
@@ -101,8 +104,8 @@
                                 <label for="year_published" class="form-label">Year</label>
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" id="year_published"
-                                        name="year_published" value="{{ old('year_published') }}" placeholder="e.g. 2020"
-                                        min="1901" max="{{ now()->year }}" maxlength="4" />
+                                        name="year_published" value="{{ old('year_published') ?? $book->year_published }}"
+                                        placeholder="e.g. 2020" min="1901" max="{{ now()->year }}" maxlength="4" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-calendar-date"></i>
                                     </div>
@@ -121,8 +124,8 @@
                                 <label for="stock" class="form-label">Stock</label>
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" id="stock" name="stock"
-                                        value="{{ old('stock') }}" placeholder="e.g. 10" min="0" max="1000"
-                                        maxlength="4" />
+                                        value="{{ old('stock') ?? $book->stock }}" placeholder="e.g. 10" min="0"
+                                        max="1000" maxlength="4" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-bar-chart"></i>
                                     </div>
@@ -146,12 +149,11 @@
 
                                         @foreach ($genres as $genre)
                                             <option value="{{ $genre->id_genre }}"
-                                                @if (old('genres')) @foreach (old('genres') as $oldGenre)
-                                                        @if ($oldGenre == $genre->id_genre)
-                                                        selected @endif
-                                                @endforeach
-                                        @endif
-                                        >{{ $genre->name }}</option>
+                                                @foreach ($book->genres as $bookGenre)
+                                                    @if ($bookGenre->id_genre == $genre->id_genre)
+                                                        selected
+                                                    @endif @endforeach>
+                                                {{ $genre->name }}</option>
                                         @endforeach
                                     </select>
 
@@ -191,9 +193,10 @@
                                 <div class="position-relative">
                                     <label class="form-label">Synopsis</label>
 
-                                    <input id="synopsis" name="synopsis" value="{{ old('synopsis') }}" type="hidden">
+                                    <input id="synopsis" name="synopsis"
+                                        value="{{ old('synopsis') ?? $book->synopsis }}" type="hidden">
                                     <div id="editor">
-                                        {!! old('synopsis') !!}
+                                        {!! old('synopsis') ?? $book->synopsis !!}
                                     </div>
 
                                     @error('synopsis')

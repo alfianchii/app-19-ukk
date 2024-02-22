@@ -38,7 +38,7 @@ class UserController extends Controller
     {
         $theUser = Auth::user();
 
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             $users = User::whereNot("id_user", $theUser->id_user)->get();
 
             $viewVariables = [
@@ -55,7 +55,7 @@ class UserController extends Controller
     {
         $theUser = Auth::user();
 
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             $viewVariables = [
                 "title" => "Create User",
             ];
@@ -69,7 +69,7 @@ class UserController extends Controller
     {
         $theUser = Auth::user();
 
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             $credentials = $request->validate($this->rules);
             $credentials["full_name"] = ucwords($credentials["full_name"]);
             $credentials["password"] = Hash::make($credentials["password"]);
@@ -97,7 +97,7 @@ class UserController extends Controller
     {
         $theUser = Auth::user();
 
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             $viewVariables = [
                 "title" => "@" . $user->username,
                 "user" => $user,
@@ -105,7 +105,7 @@ class UserController extends Controller
             return view('pages.dashboard.actors.admin.users.show', $viewVariables);
         };
 
-        if ($theUser->role === "officer") {
+        if ($theUser->role == "officer") {
             if ($theUser === $user->id_user) {
                 $viewVariables = [
                     "title" => "@" . $user->username,
@@ -115,7 +115,7 @@ class UserController extends Controller
             }
         };
 
-        if ($theUser->role === "reader") {
+        if ($theUser->role == "reader") {
             if ($theUser === $user->id_user) {
                 $viewVariables = [
                     "title" => "@" . $user->username,
@@ -132,7 +132,7 @@ class UserController extends Controller
     {
         $theUser = Auth::user();
 
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             $viewVariables = [
                 "title" => "@" . $user->username,
                 "user" => $user,
@@ -147,7 +147,7 @@ class UserController extends Controller
     {
         $theUser = Auth::user();
 
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             $rules = $this->rules;
 
             unset($rules["password"], $rules['password_confirmation']);
@@ -183,7 +183,7 @@ class UserController extends Controller
     {
         $theUser = Auth::user();
 
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             try {
                 if ($user->id_user === $theUser->id_user) throw new \Exception("You cannot unactivate yourself.");
                 if ($user->role !== "admin") {
@@ -199,17 +199,17 @@ class UserController extends Controller
             return $this->responseJsonMessage("The account of @$user->username has been non-activated!");
         };
 
-        return view("errors.403");
+        return $this->responseJsonMessage("You are unauthorized to do this action.", 422);
     }
 
     public function activate(User $user)
     {
         $theUser = Auth::user();
 
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             try {
                 if ($user->id_user === $theUser->id_user) throw new \Exception("You cannot activating yourself.");
-                if ($user !== "admin") {
+                if ($user->role !== "admin") {
                     if (!$user->update(["updated_by" => $theUser->id_user, "flag_active" => "Y", "deleted_at" => null]))
                         throw new \Exception("Error activating the user.");;
                 } else return $this->responseJsonMessage("You cannot activate Admin's account.", 422);
@@ -222,14 +222,14 @@ class UserController extends Controller
             return $this->responseJsonMessage("The account of @$user->username has been activated!");
         };
 
-        return view("errors.403");
+        return $this->responseJsonMessage("You are unauthorized to do this action.", 422);
     }
 
     public function changePassword(Request $request, User $user)
     {
         $theUser = Auth::user();
 
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             $theUser = Auth::user();
 
             $rules = [
@@ -248,6 +248,45 @@ class UserController extends Controller
         return view("errors.403");
     }
 
+    public function destroyProfilePicture(User $user)
+    {
+        $theUser = Auth::user();
+
+        if ($theUser->role == "admin") {
+            try {
+                if ($user->role !== "admin") {
+                    if (!Storage::delete($user->profile_picture)) throw new \Exception("Error removing the profile picture.");
+                    if (!$user->update(["profile_picture" => null]))
+                        throw new \Exception("Error removing the profile picture.");
+                } else return $this->responseJsonMessage("You cannot remove Admin's profile picture.", 422);
+            } catch (\PDOException | ModelNotFoundException | QueryException | \Exception $e) {
+                return $this->responseJsonMessage($e->getMessage(), 500);
+            } catch (\Exception $e) {
+                return $this->responseJsonMessage("An error occurred: " . $e->getMessage(), 500);
+            }
+
+            return $this->responseJsonMessage("The profile picture has been removed!");
+        }
+
+        if ($theUser->role == "officer" || $theUser->role == "reader") {
+            try {
+                if ($theUser->id_user === $user->id_user) {
+                    if (!Storage::delete($user->profile_picture)) throw new \Exception("Error removing the profile picture.");
+                    if (!$user->update(["profile_picture" => null]))
+                        throw new \Exception("Error removing the profile picture.");
+                } else return $this->responseJsonMessage("You cannot remove other's profile picture.", 422);
+            } catch (\PDOException | ModelNotFoundException | QueryException | \Exception $e) {
+                return $this->responseJsonMessage($e->getMessage(), 500);
+            } catch (\Exception $e) {
+                return $this->responseJsonMessage("An error occurred: " . $e->getMessage(), 500);
+            }
+
+            return $this->responseJsonMessage("The profile picture has been removed!");
+        }
+
+        return $this->responseJsonMessage("You are unauthorized to do this action.", 422);
+    }
+
     public function export(Request $request)
     {
         $validator = Validator::make($request->all(), $this->exportRules);
@@ -258,7 +297,7 @@ class UserController extends Controller
         $writterType = constant("\Maatwebsite\Excel\Excel::" . $creds["type"]);
 
         $theUser = Auth::user();
-        if ($theUser->role === "admin") {
+        if ($theUser->role == "admin") {
             if ($creds["table"] === "all-of-users") return (new AllOfUsersExport)->download($fileName, $writterType);
         };
 

@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define(
             "student",
             fn (User $user) =>
-            $user->role === "student"
+            $user->role == "student"
         );
     }
 }

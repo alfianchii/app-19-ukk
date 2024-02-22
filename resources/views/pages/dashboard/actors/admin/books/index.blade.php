@@ -33,7 +33,53 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Book</h4>
+                <div class="d-flex flex-column flex-md-row justify-content-between" style="row-gap: 1rem;">
+                    <h4>Book</h4>
+
+                    <div class="mb-3 dropdown dropdown-color-icon d-flex justify-content-start">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="export"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="select-all fa-fw fas me-1"></span> Export
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="export">
+                            <form action="/dashboard/books/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-books">
+                                <input type="hidden" name="type" value="XLSX">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="select-all fa-fw far text-light"></span> Excel
+                                </button>
+                            </form>
+
+                            <form action="/dashboard/books/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-books">
+                                <input type="hidden" name="type" value="CSV">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="select-all fa-fw fas text-light"></span> CSV
+                                </button>
+                            </form>
+
+                            <form action="/dashboard/books/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-books">
+                                <input type="hidden" name="type" value="HTML">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="select-all fa-fw fab text-light"></span> HTML
+                                </button>
+                            </form>
+
+                            <form action="/dashboard/books/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-books">
+                                <input type="hidden" name="type" value="MPDF">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="select-all fa-fw far text-light"></span> PDF
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="table-book">
@@ -44,121 +90,63 @@
                             <th>Author</th>
                             <th>Publisher</th>
                             <th>Year</th>
+                            <th>Genre</th>
                             <th>Stock</th>
+                            <th>Wishlist</th>
+                            <th>Review</th>
                             <th>Created</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Laut Bercerita</td>
-                            <td>Leila S. Chudori</td>
-                            <td>Penerbit KPG</td>
-                            <td>2017</td>
-                            <td>11</td>
-                            <td>Alfian</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/books/1/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
+                        @forelse ($books as $book)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $book->title }}</td>
+                                <td>{{ $book->author }}</td>
+                                <td>{{ $book->publisher }}</td>
+                                <td>{{ $book->year_published }}</td>
+                                <td>
+                                    @foreach ($book->genres as $genre)
+                                        @if (!$loop->last)
+                                            {{ $genre->name }},
+                                        @elseif($loop->count === 1)
+                                            {{ $genre->name }},
+                                        @else
+                                            and {{ $genre->name }}.
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td>{{ $book->stock }}</td>
+                                <td>{{ $book->wishlists->count() }}</td>
+                                <td>{{ $book->reviews->count() }}</td>
+                                <td>{{ $book->createdBy->full_name }}</td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="me-2">
+                                            <a href="/dashboard/books/{{ $book->id_book }}/edit"
+                                                class="px-2 pt-2 btn btn-warning">
+                                                <span class="select-all fa-fw fa-lg fas"></span>
+                                            </a>
+                                        </div>
 
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-book-destroy="true"
-                                            data-unique="1">
-                                            <span data-confirm-book-destroy="true" data-unique="1"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
+                                        <div class="me-2">
+                                            <a class="px-2 pt-2 btn btn-danger" data-confirm-book-destroy="true"
+                                                data-unique="{{ $book->id_book }}">
+                                                <span data-confirm-book-destroy="true" data-unique="{{ $book->id_book }}"
+                                                    class="select-all fa-fw fa-lg fas"></span>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Dompet Ayah Sepatu Ibu</td>
-                            <td>J. S. Khairen</td>
-                            <td>Gramedia Widia Sarana Indonesia</td>
-                            <td>2023</td>
-                            <td>8</td>
-                            <td>Alfian</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/books/2/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-book-destroy="true"
-                                            data-unique="2">
-                                            <span data-confirm-book-destroy="true" data-unique="2"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>I Saw the Same Dream Again</td>
-                            <td>Yoru Sumino</td>
-                            <td>Penerbit Haru</td>
-                            <td>2016</td>
-                            <td>6</td>
-                            <td>Alfian</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/books/3/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-book-destroy="true"
-                                            data-unique="3">
-                                            <span data-confirm-book-destroy="true" data-unique="3"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>The Midnight Library</td>
-                            <td>Matt Haig</td>
-                            <td>Penguins Library</td>
-                            <td>2020</td>
-                            <td>13</td>
-                            <td>Alfian</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/books/4/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-book-destroy="true"
-                                            data-unique="4">
-                                            <span data-confirm-book-destroy="true" data-unique="4"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        {{-- <tr>
-                            <td colspan="8">
-                                <p class="pt-3 text-center">Nothing :(</p>
-                            </td>
-                        </tr> --}}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="11">
+                                    <p class="pt-3 text-center">Nothing :(</p>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -170,5 +158,6 @@
     @include('utils.simple-datatable.script')
     @vite('resources/js/components/simple-datatable/dashboard/books/datatable.js')
     @include('utils.sweetalert.script')
+    @include('sweetalert::alert')
     @vite('resources/js/components/sweetalert/dashboard/books/alert.js')
 @endsection

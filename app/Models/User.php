@@ -21,4 +21,9 @@ class User extends Authenticatable
         'password' => 'hashed',
         'born' => 'date',
     ];
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, "created_by", "id_user");
+    }
 }

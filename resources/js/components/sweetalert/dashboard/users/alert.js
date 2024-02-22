@@ -28,4 +28,20 @@ document.documentElement.addEventListener("click", function (event) {
             uri: "/dashboard/users/activate",
             redirect: "/dashboard/users",
         });
+
+    // Profile Picture Destroy
+    if (
+        event.target &&
+        event.target.matches("[data-confirm-user-profile-picture-destroy]")
+    )
+        handleClick({
+            data: { unique },
+            event: {
+                noun: "profile picture",
+                verb: "remove",
+                method: "DELETE",
+            },
+            uri: "/dashboard/users/destroy-profile-picture",
+            redirect: "/dashboard/users",
+        });
 });

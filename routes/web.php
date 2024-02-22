@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\{AuthController, RegisterController};
-use App\Http\Controllers\Dashboard\{UserController};
+use App\Http\Controllers\Dashboard\{MasterBookController, MasterGenreController, RecBookReceiptController, UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,25 +54,16 @@ Route::group(['prefix' => "dashboard", "middleware" => ["auth"]], function () {
     });
 
     // Genre
-    Route::get('/genres', function () {
-        return view("pages.dashboard.actors.admin.genres.index", ["title" => "Genre"]);
-    });
-    Route::get('/genres/create', function () {
-        return view("pages.dashboard.actors.admin.genres.create", ["title" => "Create Genre"]);
-    });
+    Route::resource('/genres', MasterGenreController::class)->except(["show"]);
+    Route::put('/genres/activate/{genre:id_genre}', [MasterGenreController::class, "activate"]);
+    Route::post("/genres/export", [MasterGenreController::class, "export"]);
 
     // Book
-    Route::get('/books', function () {
-        return view("pages.dashboard.actors.admin.books.index", ["title" => "Book"]);
-    });
-    Route::get('/books/create', function () {
-        return view("pages.dashboard.actors.admin.books.create", ["title" => "Create Book"]);
-    });
+    Route::resource('/books', MasterBookController::class)->except(["show"]);
+    Route::post("/books/export", [MasterBookController::class, "export"]);
 
     // Receipt
-    Route::get('/receipts', function () {
-        return view("pages.dashboard.actors.admin.receipts.index", ["title" => "Receipt"]);
-    });
+    Route::resource('/receipts', RecBookReceiptController::class);
     Route::get('/receipts/create', function () {
         return view("pages.dashboard.actors.admin.receipts.create", ["title" => "Create Receipt"]);
     });
@@ -94,5 +85,6 @@ Route::group(['prefix' => "dashboard", "middleware" => ["auth"]], function () {
     Route::resource('/users', UserController::class);
     Route::put('/users/activate/{user:id_user}', [UserController::class, "activate"]);
     Route::put('/users/{user:id_user}/change-password', [UserController::class, "changePassword"]);
+    Route::delete('/users/destroy-profile-picture/{user:id_user}', [UserController::class, "destroyProfilePicture"]);
     Route::post("/users/export", [UserController::class, "export"]);
 });

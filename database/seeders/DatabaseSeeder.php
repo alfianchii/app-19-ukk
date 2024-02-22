@@ -14,6 +14,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
+            MasterGenreSeeder::class,
+            MasterBookSeeder::class,
+            DTBookGenreSeeder::class,
+            RecBookReceiptSeeder::class,
+            HistoryBookWishlistSeeder::class,
+            RecBookReviewSeeder::class,
         ]);
     }
 }
