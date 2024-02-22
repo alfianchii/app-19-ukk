@@ -101,7 +101,7 @@
 
                 <div class="flex flex-col justify-center mt-10 lg:justify-start lg:flex-row">
                     <div class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
-                        @if (auth()?->user()?->profile_photo)
+                        @if (auth()?->user()?->profile_picture)
                             <img width="60" class="rounded-full"
                                 src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
                         @else
@@ -161,7 +161,7 @@
                     <div class="flex flex-col justify-center mt-10 lg:justify-start lg:flex-row">
                         <div
                             class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
-                            @if (auth()?->user()?->profile_photo)
+                            @if (auth()?->user()?->profile_picture)
                                 <img width="60" class="rounded-full"
                                     src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
                             @else
@@ -188,7 +188,7 @@
                     <div class="flex flex-col justify-center mt-10 lg:justify-start lg:flex-row">
                         <div
                             class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
-                            @if (auth()?->user()?->profile_photo)
+                            @if (auth()?->user()?->profile_picture)
                                 <img width="60" class="rounded-full"
                                     src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
                             @else
@@ -215,7 +215,7 @@
                     <div class="flex flex-col justify-center mt-10 lg:justify-start lg:flex-row">
                         <div
                             class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
-                            @if (auth()?->user()?->profile_photo)
+                            @if (auth()?->user()?->profile_picture)
                                 <img width="60" class="rounded-full"
                                     src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
                             @else

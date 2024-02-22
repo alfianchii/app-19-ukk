@@ -103,7 +103,7 @@
                     <div class="mb-5">
                         <label for="username" class="block mb-2 text-sm font-bold text-midnight-blue">Username</label>
                         <input type="text" id="username"
-                            class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                            class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                             placeholder="e.g. alfianchii" name="username" autofocus>
 
                         @error('username')
@@ -114,7 +114,7 @@
                         <label for="password" class="block mb-2 text-sm font-bold text-midnight-blue">Your
                             password</label>
                         <input type="password" id="password" placeholder="e.g. 4kuBu7uhM3dk1t"
-                            class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                            class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                             name="password">
 
                         @error('password')
@@ -140,4 +140,5 @@
 @endsection
 
 @section('additional_scripts')
+    @include('utils.session.forget-error')
 @endsection

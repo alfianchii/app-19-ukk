@@ -18,20 +18,13 @@
                     <a href="/dashboard/users/{{ $user->id_user }}/edit" class="px-2 pt-2 btn btn-warning me-1">
                         <span class="select-all fa-fw fa-lg fas"></span>
                     </a>
-                    @if ($user->id_user !== auth()->user()->id_user)
-                        <a class="px-2 pt-2 btn btn-danger me-1" data-confirm-user-destroy="true"
-                            data-unique="{{ $user->id_user }}">
-                            <span data-confirm-user-destroy="true" data-unique="{{ $user->id_user }}"
-                                class="select-all fa-fw fa-lg fas"></span>
-                        </a>
-                    @endif
                 </div>
             </div>
             <div class="order-first col-12 col-md-6 order-md-2">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/dashboard/users">User</a></li>
+                        <li class="breadcrumb-item active">User</li>
                         <li class="breadcrumb-item active" aria-current="page">Profile</li>
                     </ol>
                 </nav>
@@ -57,7 +50,7 @@
 
                     <h4 class="mt-4">{{ $user->full_name }}</h4>
 
-                    <small class="text-muted">({{ '@' }}{{ $user->username }})</small>
+                    <small class="text-muted">(@alfianchii)</small>
                 </div>
 
                 <div class="divider">
@@ -115,6 +108,5 @@
 
 @section('additional_scripts')
     @include('utils.sweetalert.script')
-    @include('sweetalert::alert')
     @vite('resources/js/components/sweetalert/dashboard/users/alert.js')
 @endsection

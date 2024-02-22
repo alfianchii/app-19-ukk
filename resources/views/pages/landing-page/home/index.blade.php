@@ -8,14 +8,14 @@
 @section('content')
     {{-- Cover --}}
     <section class="hidden xl:block">
-        <div class="absolute right-0 -top-[7%] drop-shadow-2xl">
+        <div class="absolute right-0 -top-0 drop-shadow-2xl">
             <svg width="674" height="713" viewBox="0 0 674 713" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M265.601 60.5414C269.865 50.6258 279.128 43.7654 289.856 42.5764L674 0V713H30.5588C9.00504 713 -5.51611 690.948 2.99935 671.148L265.601 60.5414Z"
                     fill="#4475F2" />
             </svg>
         </div>
-        <div class="absolute right-0 -top-[7%] drop-shadow-2xl">
+        <div class="absolute right-0 -top-0 drop-shadow-2xl">
             <svg width="720" height="713" viewBox="0 0 720 713" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 0H720V713H473.7C456.467 713 440.449 704.126 431.31 689.516L0 0Z" fill="#4475F2" />
             </svg>
@@ -49,15 +49,15 @@
                 <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/Dompet Ayah Sepatu Ibu.png') }}"
                     alt="Dompet Ayah Sepatu Ibu">
             </div>
-            <div class="absolute top-0 right-52">
+            <div class="absolute top-0 right-[450px]">
                 <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/Talking to Strangers.png') }}"
                     alt="Talking to Strangers">
             </div>
-            <div class="absolute right-0 top-28">
+            <div class="absolute right-10 top-28">
                 <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/Laut Bercerita.png') }}"
                     alt="Laut Bercerita">
             </div>
-            <div class="absolute right-40 top-[350px]">
+            <div class="absolute right-72 top-[350px]">
                 <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/The Visual MBA.png') }}"
                     alt="The Visual MBA">
             </div>

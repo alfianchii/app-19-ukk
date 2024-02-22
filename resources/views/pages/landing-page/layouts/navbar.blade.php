@@ -12,19 +12,6 @@
                     class="absolute top-[80px] right-[2000px] hidden opacity-0 md:static md:block md:opacity-100">
                     <ul class="flex flex-col md:flex-row gap-y-6 md:gap-y-0 md:gap-x-10 text-battleship-grey">
                         @auth
-                            <li class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue">
-                                <a href="/#features">Feature</a>
-                            </li>
-                            <li class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue">
-                                <a href="/#services">Service</a>
-                            </li>
-                            <li class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue">
-                                <a href="/#reviews">Review</a>
-                            </li>
-                            <li class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue">
-                                <a href="/#location">Location</a>
-                            </li>
-                        @else
                             <li
                                 class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue @if (Request::is('/')) text-dodger-blue @endif">
                                 <a href="/">Home</a>
@@ -37,9 +24,18 @@
                                 class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue @if (Request::is('genres*')) text-dodger-blue @endif">
                                 <a href="/genres">Genres</a>
                             </li>
-                            <li
-                                class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue @if (Request::is('reviews*')) text-dodger-blue @endif">
-                                <a href="/reviews">Reviews</a>
+                        @else
+                            <li class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue">
+                                <a href="/#features">Feature</a>
+                            </li>
+                            <li class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue">
+                                <a href="/#services">Service</a>
+                            </li>
+                            <li class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue">
+                                <a href="/#reviews">Review</a>
+                            </li>
+                            <li class="text-base font-medium transition-all duration-300 md:text-sm hover:text-royal-blue">
+                                <a href="/#location">Location</a>
                             </li>
                         @endauth
                     </ul>

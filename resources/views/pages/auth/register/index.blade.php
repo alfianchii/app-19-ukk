@@ -106,7 +106,7 @@
                             <label for="full_name" class="block mb-2 text-sm font-bold text-midnight-blue">Full
                                 Name</label>
                             <input type="text" id="full_name"
-                                class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full py-2.5 pe-32"
+                                class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full py-2.5 pe-32"
                                 placeholder="e.g. Muhammad Alfian" name="full_name" value="{{ old('full_name') }}"
                                 autofocus>
 
@@ -116,8 +116,8 @@
                         </div>
                         <div class="mb-5">
                             <label for="nik" class="block mb-2 text-sm font-bold text-midnight-blue">NIK</label>
-                            <input type="number" id="nik" placeholder="e.g. 1050241708900001"
-                                class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                            <input type="text" id="nik" placeholder="e.g. 1050241708900001"
+                                class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                                 name="nik" value="{{ old('nik') }}" maxlength="16">
 
                             @error('nik')
@@ -130,7 +130,7 @@
                         <div class="mb-5">
                             <label for="username" class="block mb-2 text-sm font-bold text-midnight-blue">Username</label>
                             <input type="text" id="username"
-                                class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                                class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                                 placeholder="e.g. alfianchii" name="username" value="{{ old('username') }}">
 
                             @error('username')
@@ -140,7 +140,7 @@
                         <div class="mb-5">
                             <label for="email" class="block mb-2 text-sm font-bold text-midnight-blue">Email</label>
                             <input type="email" id="email" placeholder="e.g. alfian.ganteng@gmail.com"
-                                class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                                class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                                 name="email" value="{{ old('email') }}">
 
                             @error('email')
@@ -152,10 +152,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-7">
                         <div class="mb-5">
                             <label for="phone" class="block mb-2 text-sm font-bold text-midnight-blue">Phone</label>
-                            <input type="tel" id="phone"
-                                class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                            <input type="text" id="phone"
+                                class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                                 placeholder="e.g. 082384763478" name="phone" value="{{ old('phone') }}"
-                                maxlength="13">
+                                min="11" max="13" maxlength="13">
 
                             @error('phone')
                                 <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
@@ -164,7 +164,7 @@
                         <div class="mb-5">
                             <label for="born" class="block mb-2 text-sm font-bold text-midnight-blue">Born</label>
                             <input type="date" id="born" placeholder="e.g. alfian.ganteng@gmail.com"
-                                class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                                class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                                 name="born" value="{{ old('date') ?? date('Y-m-d') }}">
 
                             @error('born')
@@ -177,7 +177,7 @@
                         <div class="mb-5">
                             <label for="address" class="block mb-2 text-sm font-bold text-midnight-blue">Address</label>
                             <input type="text" id="address"
-                                class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                                class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                                 placeholder="e.g. Jl. Free Fire Factory, No. 1, Kla Only" name="address"
                                 value="{{ old('address') }}">
 
@@ -215,7 +215,7 @@
                         <div class="mb-5">
                             <label for="password" class="block mb-2 text-sm font-bold text-midnight-blue">Password</label>
                             <input type="password" id="password"
-                                class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                                class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                                 placeholder="e.g. 4kuBu7uhM3dk1t" name="password" value="{{ old('password') }}">
 
                             @error('password')
@@ -226,7 +226,7 @@
                             <label for="password_confirmation"
                                 class="block mb-2 text-sm font-bold text-midnight-blue">Password Confirmation</label>
                             <input type="password" id="password_confirmation" placeholder="e.g. 4kuBu7uhM3dk1t"
-                                class="border border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
+                                class="border placeholder-ash-grey/50 border-pale-silver text-slate-grey text-sm rounded-md transition-all duration-300 outline-none focus:ring-royal-blue focus:border-royal-blue ring-royal-blue block w-full p-2.5"
                                 name="password_confirmation" value="{{ old('password_confirmation') }}">
 
                             @error('password_confirmation')
@@ -270,4 +270,6 @@
 @section('additional_scripts')
     @include('utils.filepond.script')
     @vite('resources/js/components/filepond/image-crop/photo.js')
+
+    @include('utils.session.forget-error')
 @endsection

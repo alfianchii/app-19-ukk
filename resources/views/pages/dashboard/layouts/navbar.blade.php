@@ -15,13 +15,13 @@
                     <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="user-menu d-flex">
                             <div class="user-name text-end me-3">
-                                <h6 class="mb-0 text-gray-600">Alfian</h6>
-                                <p class="mb-0 text-sm text-gray-600">Admin</p>
+                                <h6 class="mb-0 text-gray-600">{{ auth()->user()->full_name }}</h6>
+                                <p class="mb-0 text-sm text-gray-600">{{ ucwords(auth()->user()->role) }}</p>
                             </div>
                             <div class="user-img d-flex align-items-center">
                                 <div class="avatar avatar-md">
-                                    @if (auth()?->user()?->profile_photo)
-                                        <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}"
+                                    @if (auth()?->user()?->profile_picture)
+                                        <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
                                             alt="Avatar">
                                     @else
                                         <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="Avatar">

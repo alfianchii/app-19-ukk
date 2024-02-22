@@ -10,8 +10,8 @@
     <div class="page-title">
         <div class="row">
             <div class="order-last col-12 col-md-6 order-md-1">
-                <h3>{{ $greeting }}, Alfian!</h3>
-                <p class="text-subtitle text-muted">Status: Admin.</p>
+                <h3>{{ $greeting }}, {{ auth()->user()->full_name }}!</h3>
+                <p class="text-subtitle text-muted">Status: {{ ucwords(auth()->user()->role) }}</p>
             </div>
             <div class="order-first col-12 col-md-6 order-md-2">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">

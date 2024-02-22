@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,7 +22,27 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Pagination
         Paginator::defaultView('vendor.pagination.tailwind');
         Paginator::defaultSimpleView('vendor.pagination.simple-tailwind');
+
+        // Gates
+        Gate::define(
+            "admin",
+            fn (User $user) =>
+            $user->role == "admin"
+        );
+
+        Gate::define(
+            "officer",
+            fn (User $user) =>
+            $user->role == "officer"
+        );
+
+        Gate::define(
+            "student",
+            fn (User $user) =>
+            $user->role === "student"
+        );
     }
 }

@@ -53,12 +53,15 @@
                 </li>
 
                 <li class="sidebar-title">Menu</li>
-                <li class="sidebar-item @if (Request::is('dashboard/genres*')) active @endif">
-                    <a href="/dashboard/genres" class='sidebar-link'>
-                        <i class="bi bi-book-half"></i>
-                        <span>Genre</span>
-                    </a>
-                </li>
+                @can('admin')
+                    <li class="sidebar-item @if (Request::is('dashboard/genres*')) active @endif">
+                        <a href="/dashboard/genres" class='sidebar-link'>
+                            <i class="bi bi-book-half"></i>
+                            <span>Genre</span>
+                        </a>
+                    </li>
+                @endcan
+
                 <li class="sidebar-item @if (Request::is('dashboard/books*')) active @endif">
                     <a href="/dashboard/books" class='sidebar-link'>
                         <i class="bi bi-book"></i>
@@ -83,18 +86,15 @@
                         <span>Wishlist</span>
                     </a>
                 </li>
-                <li class="sidebar-item @if (Request::is('dashboard/users*') and !str_contains(request()->url(), 'change-password')) active @endif">
-                    <a href="/dashboard/users" class='sidebar-link'>
-                        <i class="bi bi-person"></i>
-                        <span>User</span>
-                    </a>
-                </li>
-                <li class="sidebar-item @if (Request::is('dashboard/users/change-password*')) active @endif">
-                    <a href="/dashboard/users/change-password/1" class='sidebar-link'>
-                        <i class="bi bi-key"></i>
-                        <span>Change Password</span>
-                    </a>
-                </li>
+
+                @can('admin')
+                    <li class="sidebar-item @if (Request::is('dashboard/users*') and !str_contains(request()->url(), 'change-password')) active @endif">
+                        <a href="/dashboard/users" class='sidebar-link'>
+                            <i class="bi bi-person"></i>
+                            <span>User</span>
+                        </a>
+                    </li>
+                @endcan
             </ul>
         </div>
     </div>

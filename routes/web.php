@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\{AuthController, RegisterController};
+use App\Http\Controllers\Dashboard\{UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,13 +19,14 @@ Route::get('/', function () {
     return view('pages.landing-page.home.index', ["title" => "Home"]);
 });
 
-Route::get('/login', function () {
-    return view('pages.auth.login.index', ["title" => "Login"]);
-});
+// Authentication
+Route::get('/login', [AuthController::class, "index"])->middleware("guest");
+Route::post('/login', [AuthController::class, "authenticate"])->name("login")->middleware("guest");
+Route::post('/logout', [AuthController::class, "logout"])->middleware("auth");
 
-Route::get('/register', function () {
-    return view('pages.auth.register.index', ["title" => "Register"]);
-});
+// Register
+Route::get('/register', [RegisterController::class, "index"])->middleware("guest");
+Route::post('/register', [RegisterController::class, "register"]);
 
 // Landing Page
 // Book
@@ -45,7 +48,7 @@ Route::get('/reviews', function () {
 });
 
 // Dashboard
-Route::group(['prefix' => "dashboard"], function () {
+Route::group(['prefix' => "dashboard", "middleware" => ["auth"]], function () {
     Route::get('/', function () {
         return view("pages.dashboard.actors.admin.index", ["title" => "Dashboard", "greeting" => "Good morning"]);
     });
@@ -88,19 +91,8 @@ Route::group(['prefix' => "dashboard"], function () {
     });
 
     // User
-    Route::get('/users', function () {
-        return view("pages.dashboard.actors.admin.users.index", ["title" => "User"]);
-    });
-    Route::get('/users/1', function () {
-        return view("pages.dashboard.actors.admin.users.show", ["title" => "@alfianchii"]);
-    });
-    Route::get('/users/1/edit', function () {
-        return view("pages.dashboard.actors.admin.users.edit", ["title" => "@alfianchii"]);
-    });
-    Route::get('/users/create', function () {
-        return view("pages.dashboard.actors.admin.users.create", ["title" => "Create User"]);
-    });
-    Route::get('/users/change-password/1', function () {
-        return view("pages.dashboard.actors.admin.users.change-password", ["title" => "Change Password"]);
-    });
+    Route::resource('/users', UserController::class);
+    Route::put('/users/activate/{user:id_user}', [UserController::class, "activate"]);
+    Route::put('/users/{user:id_user}/change-password', [UserController::class, "changePassword"]);
+    Route::post("/users/export", [UserController::class, "export"]);
 });

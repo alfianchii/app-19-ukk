@@ -33,7 +33,53 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">User</h4>
+                <div class="d-flex flex-column flex-md-row justify-content-between" style="row-gap: 1rem;">
+                    <h3>User</h3>
+
+                    <div class="dropdown dropdown-color-icon mb-3 d-flex justify-content-start">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="export"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="fa-fw select-all fas me-1"></span> Export
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="export">
+                            <form action="/dashboard/users/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-users">
+                                <input type="hidden" name="type" value="XLSX">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="fa-fw select-all far text-light"></span> Excel
+                                </button>
+                            </form>
+
+                            <form action="/dashboard/users/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-users">
+                                <input type="hidden" name="type" value="CSV">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="fa-fw select-all fas text-light"></span> CSV
+                                </button>
+                            </form>
+
+                            <form action="/dashboard/users/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-users">
+                                <input type="hidden" name="type" value="HTML">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="fa-fw select-all fab text-light"></span> HTML
+                                </button>
+                            </form>
+
+                            <form action="/dashboard/users/export" method="POST">
+                                @csrf
+                                <input type="hidden" name="table" value="all-of-users">
+                                <input type="hidden" name="type" value="MPDF">
+                                <button type="submit" class="dropdown-item">
+                                    <span class="fa-fw select-all far text-light"></span> PDF
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="table-user">
@@ -49,214 +95,83 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                @if (auth()?->user()?->profile_photo)
-                                    <img class="rounded" width="100"
-                                        src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
-                                @else
-                                    <img class="rounded" width="100" src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
-                                        alt="User Avatar" />
-                                @endif
-                            </td>
-                            <td>Alfian</td>
-                            <td>{{ now()->format('j F Y, \a\t H.i') }}</td>
-                            <td>
-                                <span class="badge bg-info">Admin</span>
-                            </td>
-                            <td>
-                                <span class="badge bg-light-success">Active</span>
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/users/1/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
-                                            data-unique="1">
-                                            <span data-confirm-user-destroy="true" data-unique="1"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-success" data-confirm-user-activate="true"
-                                            data-unique="1">
-                                            <span data-confirm-user-activate="true" data-unique="1"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
+                        @forelse ($users as $user)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    @if ($user->profile_picture)
+                                        <img class="rounded" width="100"
+                                            src="{{ asset('storage/' . $user->profile_picture) }}" alt="User Avatar" />
+                                    @else
+                                        <img class="rounded" width="100"
+                                            src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />
+                                    @endif
+                                </td>
+                                <td>{{ $user->full_name }}</td>
+                                <td>{{ $user->created_at->format('j F Y, \a\t H.i') }}</td>
+                                <td>
+                                    @if ($user->role == 'admin')
+                                        <span class="badge bg-info">Admin</span>
+                                    @elseif ($user->role == 'officer')
+                                        <span class="badge bg-warning">Officer</span>
+                                    @elseif($user->role == 'reader')
+                                        <span class="badge bg-success">Reader</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($user->flag_active == 'Y')
+                                        <span class="badge bg-light-success">Active</span>
+                                    @else
+                                        <span class="badge bg-light-danger">Non-active</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        @if ($user->role != 'admin')
+                                            <div class="me-2">
+                                                <a href="/dashboard/users/{{ $user->id_user }}/edit"
+                                                    class="px-2 pt-2 btn btn-warning">
+                                                    <span class="select-all fa-fw fa-lg fas"></span>
+                                                </a>
+                                            </div>
+                                        @endif
 
-                                    <div class="me-2">
-                                        <a href="/dashboard/users/1" class="px-2 pt-2 btn btn-info">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>
-                                @if (auth()?->user()?->profile_photo)
-                                    <img class="rounded" width="100"
-                                        src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
-                                @else
-                                    <img class="rounded" width="100" src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
-                                        alt="User Avatar" />
-                                @endif
-                            </td>
-                            <td>Nugraha</td>
-                            <td>{{ now()->format('j F Y, \a\t H.i') }}</td>
-                            <td>
-                                <span class="badge bg-warning">Officer</span>
-                            </td>
-                            <td>
-                                <span class="badge bg-light-success">Active</span>
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/users/2/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
+                                        @if ($user->flag_active == 'Y' and $user->role != 'admin')
+                                            <div class="me-2">
+                                                <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
+                                                    data-unique="{{ $user->id_user }}">
+                                                    <span data-confirm-user-destroy="true"
+                                                        data-unique="{{ $user->id_user }}"
+                                                        class="select-all fa-fw fa-lg fas"></span>
+                                                </a>
+                                            </div>
+                                        @elseif($user->flag_active == 'N' and $user->role != 'admin')
+                                            <div class="me-2">
+                                                <a class="px-2 pt-2 btn btn-success" data-confirm-user-activate="true"
+                                                    data-unique="{{ $user->id_user }}">
+                                                    <span data-confirm-user-activate="true"
+                                                        data-unique="{{ $user->id_user }}"
+                                                        class="select-all fa-fw fa-lg fas"></span>
+                                                </a>
+                                            </div>
+                                        @endif
 
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
-                                            data-unique="2">
-                                            <span data-confirm-user-destroy="true" data-unique="2"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
+                                        <div class="me-2">
+                                            <a href="/dashboard/users/{{ $user->id_user }}"
+                                                class="px-2 pt-2 btn btn-info">
+                                                <span class="select-all fa-fw fa-lg fas"></span>
+                                            </a>
+                                        </div>
                                     </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-success" data-confirm-user-activate="true"
-                                            data-unique="2">
-                                            <span data-confirm-user-activate="true" data-unique="2"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a href="/dashboard/users/2" class="px-2 pt-2 btn btn-info">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>
-                                @if (auth()?->user()?->profile_photo)
-                                    <img class="rounded" width="100"
-                                        src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
-                                @else
-                                    <img class="rounded" width="100" src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
-                                        alt="User Avatar" />
-                                @endif
-                            </td>
-                            <td>Moepoi</td>
-                            <td>{{ now()->format('j F Y, \a\t H.i') }}</td>
-                            <td>
-                                <span class="badge bg-success">Reader</span>
-                            </td>
-                            <td>
-                                <span class="badge bg-light-danger">Non-active</span>
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/users/3/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
-                                            data-unique="3">
-                                            <span data-confirm-user-destroy="true" data-unique="3"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-success" data-confirm-user-activate="true"
-                                            data-unique="3">
-                                            <span data-confirm-user-activate="true" data-unique="3"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a href="/dashboard/users/3" class="px-2 pt-2 btn btn-info">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>
-                                @if (auth()?->user()?->profile_photo)
-                                    <img class="rounded" width="100"
-                                        src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
-                                        alt="User Avatar" />
-                                @else
-                                    <img class="rounded" width="100"
-                                        src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />
-                                @endif
-                            </td>
-                            <td>Ogi</td>
-                            <td>{{ now()->format('j F Y, \a\t H.i') }}</td>
-                            <td>
-                                <span class="badge bg-warning">Reader</span>
-                            </td>
-                            <td>
-                                <span class="badge bg-light-success">Active</span>
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a href="/dashboard/users/4/edit" class="px-2 pt-2 btn btn-warning">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
-                                            data-unique="4">
-                                            <span data-confirm-user-destroy="true" data-unique="4"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-success" data-confirm-user-activate="true"
-                                            data-unique="4">
-                                            <span data-confirm-user-activate="true" data-unique="4"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a href="/dashboard/users/4" class="px-2 pt-2 btn btn-info">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        {{-- <tr>
-                            <td colspan="7">
-                                <p class="pt-3 text-center">Nothing :(</p>
-                            </td>
-                        </tr> --}}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7">
+                                    <p class="pt-3 text-center">Nothing :(</p>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
