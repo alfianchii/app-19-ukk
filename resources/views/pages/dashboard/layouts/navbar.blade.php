@@ -33,9 +33,11 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
                         style="min-width: 11rem;">
                         <li>
-                            <h6 class="dropdown-header">Hello, {{ '@' . 'alfianchii' }}!</h6>
+                            <h6 class="dropdown-header">Hello, {{ '@' . auth()->user()->username }}!</h6>
                         </li>
-                        <li><a class="dropdown-item" href="/dashboard/users/1"><i
+                        <li><a class="dropdown-item @if (Request::is('dashboard/users/' . auth()->user()->id_user) or
+                                str_contains(request()->url(), 'users/' . auth()->user()->id_user . '/edit')) active @endif"
+                                href="/dashboard/users/{{ auth()->user()->id_user }}"><i
                                     class="icon-mid bi bi-person me-2"></i> My
                                 Profile</a></li>
                         <hr class="dropdown-divider">

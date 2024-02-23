@@ -50,7 +50,7 @@
 
                     <h4 class="mt-4">{{ $user->full_name }}</h4>
 
-                    <small class="text-muted">(@alfianchii)</small>
+                    <small class="text-muted">{{ '@' }}{{ $user->username }}</small>
                 </div>
 
                 <div class="divider">
@@ -75,6 +75,15 @@
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="font-bold">
+                                <p>Phone:
+                                    <span style="font-weight: 400;" class="text-muted">
+                                        {{ $user->phone }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="font-bold">
                                 <p>Gender:
                                     <span style="font-weight: 400;" class="text-muted">
                                         {{ ucwords($user->gender) }}
@@ -82,9 +91,24 @@
                                 </p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="font-bold">
                                 <p>Status: <span class="badge bg-primary">{{ ucwords($user->role) }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="font-bold">
+                                <p>Active:
+                                    <span style="font-weight: 400;" class="text-muted">
+                                        @if ($user->flag_active == 'Y')
+                                            Yes
+                                        @else
+                                            No
+                                        @endif
+                                    </span>
                                 </p>
                             </div>
                         </div>
@@ -108,5 +132,6 @@
 
 @section('additional_scripts')
     @include('utils.sweetalert.script')
+    @include('sweetalert::alert')
     @vite('resources/js/components/sweetalert/dashboard/users/alert.js')
 @endsection

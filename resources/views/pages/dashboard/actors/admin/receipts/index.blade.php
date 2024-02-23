@@ -38,7 +38,7 @@
                 <div class="d-flex flex-column flex-md-row justify-content-between" style="row-gap: 1rem;">
                     <h4>Receipt</h4>
 
-                    <div class="mb-3 dropdown dropdown-color-icon d-flex justify-content-start">
+                    <div class="dropdown dropdown-color-icon d-flex justify-content-start">
                         <button class="btn btn-primary dropdown-toggle" type="button" id="export"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="select-all fa-fw fas me-1"></span> Export
@@ -97,143 +97,126 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Nugraha</td>
-                            <td>Dompet Ayah Sepatu Ibu</td>
-                            <td>6</td>
-                            <td><span class="badge bg-success">Returned</span></td>
-                            <td>{{ now()->format('j M Y') }} to {{ now()->subDays(-7)->format('j M Y') }}</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-success" data-confirm-book-returned="true"
-                                            data-unique="1">
-                                            <span data-confirm-book-returned="true" data-unique="1"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
+                        @forelse ($receipts as $receipt)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $receipt->user->full_name }}</td>
+                                <td>{{ $receipt->book->title }}</td>
+                                <td>{{ $receipt->amount }}</td>
+                                <td>
+                                    <span
+                                        class="badge @if ($receipt->status === 'returned') {{ 'bg-success' }}
+                                        @elseif($receipt->status === 'taken') {{ 'bg-warning' }}
+                                        @elseif($receipt->status === 'overdue') {{ 'bg-danger' }} @endif">{{ Str::title($receipt->status) }}</span>
+                                </td>
+                                <td>{{ $receipt->from_time->format('j M Y') }} to {{ $receipt->to_time->format('j M Y') }}
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        @if ($receipt->status === 'taken' || $receipt->status === 'overdue')
+                                            <div class="me-2">
+                                                <a class="px-2 pt-2 btn btn-success" data-confirm-book-returned="true"
+                                                    data-unique="{{ $receipt->id_book_receipt }}">
+                                                    <span data-confirm-book-returned="true"
+                                                        data-unique="{{ $receipt->id_book_receipt }}"
+                                                        class="select-all fa-fw fa-lg fas"></span>
+                                                </a>
+                                            </div>
+                                        @endif
 
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
-                                            data-unique="1">
-                                            <span data-confirm-user-destroy="true" data-unique="1"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
+                                        @if ($receipt->status === 'overdue' && $receipt->user->flag_active === 'Y')
+                                            <div class="me-2">
+                                                <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
+                                                    data-unique="{{ $receipt->id_book_receipt }}">
+                                                    <span data-confirm-user-destroy="true"
+                                                        data-unique="{{ $receipt->id_book_receipt }}"
+                                                        class="select-all fa-fw fa-lg fas"></span>
+                                                </a>
+                                            </div>
+                                        @endif
 
-                                    <div class="me-2">
-                                        <a href="/dashboard/receipts/1" class="px-2 pt-2 btn btn-info">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Moepoi</td>
-                            <td>The Visual MBA</td>
-                            <td>3</td>
-                            <td><span class="badge bg-warning">Taken</span></td>
-                            <td>{{ now()->format('j M Y') }} to {{ now()->subDays(-7)->format('j M Y') }}</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-success" data-confirm-book-returned="true"
-                                            data-unique="2">
-                                            <span data-confirm-book-returned="true" data-unique="2"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
+                                        <div class="me-2">
+                                            <a data-bs-toggle="modal"
+                                                data-bs-target="#receipt-details-{{ $receipt->id_book_receipt }}"
+                                                class="px-2 pt-2 btn btn-info">
+                                                <span class="select-all fa-fw fa-lg fas"></span>
+                                            </a>
 
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
-                                            data-unique="2">
-                                            <span data-confirm-user-destroy="true" data-unique="2"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
+                                            <div class="text-left modal fade"
+                                                id="receipt-details-{{ $receipt->id_book_receipt }}" tabindex="-1"
+                                                role="dialog" aria-labelledby="header" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                                    role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-primary">
+                                                            <h5 class="modal-title white" id="header">
+                                                                #{{ $receipt->id_book_receipt }}</h5>
+                                                            <span style="cursor: pointer;"
+                                                                class="text-black select-all fa-fw fa-lg fas"
+                                                                data-bs-dismiss="modal"></span>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p><span class="fw-bold">Reader</span>:
+                                                                {{ $receipt->user->full_name }}</p>
+                                                            <p><span class="fw-bold">Reader's status</span>:
+                                                                @if ($receipt->user->flag_active == 'Y')
+                                                                    Active
+                                                                @else
+                                                                    Non-active
+                                                                @endif
+                                                            </p>
+                                                            <p><span class="fw-bold">Book</span>:
+                                                                {{ $receipt->book->title }}</p>
+                                                            <p><span class="fw-bold">Amount</span>:
+                                                                {{ $receipt->amount }}</p>
+                                                            <p><span class="fw-bold">From time</span>:
+                                                                {{ $receipt->from_time->format('j F Y') }}</p>
+                                                            <p><span class="fw-bold">To time</span>:
+                                                                {{ $receipt->to_time->format('j F Y') }}</p>
+                                                            <p><span class="fw-bold">Time range</span>:
+                                                                {{ $receipt->from_time->diff($receipt->to_time)->format('%a') }}
+                                                                day(s)
+                                                            </p>
+                                                            <p><span class="fw-bold">Time left</span>:
+                                                                @if (now() >= $receipt->to_time)
+                                                                    0 day
+                                                                @else
+                                                                    {{ $receipt->to_time->diffInDays(now()) }}
+                                                                @endif
+                                                            </p>
+                                                            <p><span class="fw-bold">Status</span>:
+                                                                {{ Str::title($receipt->status) }}</p>
 
-                                    <div class="me-2">
-                                        <a href="/dashboard/receipts/2" class="px-2 pt-2 btn btn-info">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
+                                                            @if ($receipt->status === 'returned')
+                                                                <p><span class="fw-bold">Returned at</span>:
+                                                                    {{ $receipt->date_returned->format('j F Y') }}</p>
+                                                            @endif
+                                                            <p><span class="fw-bold">Receiptment is created by</span>:
+                                                                <a
+                                                                    href="/dashboard/users/{{ $receipt->createdBy->id_user }}">{{ '@' . $receipt->createdBy->username }}</a>
+                                                            </p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-light-secondary"
+                                                                data-bs-dismiss="modal">
+                                                                <i class="bx bx-x d-block d-sm-none"></i>
+                                                                <span class="d-none d-sm-block">Close</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Galih</td>
-                            <td>Laut Bercerita</td>
-                            <td>7</td>
-                            <td><span class="badge bg-danger">Overdue</span></td>
-                            <td>{{ now()->format('j M Y') }} to {{ now()->subDays(-7)->format('j M Y') }}</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-success" data-confirm-book-returned="true"
-                                            data-unique="3">
-                                            <span data-confirm-book-returned="true" data-unique="3"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
-                                            data-unique="3">
-                                            <span data-confirm-user-destroy="true" data-unique="3"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a href="/dashboard/receipts/3" class="px-2 pt-2 btn btn-info">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Ogi</td>
-                            <td>Talking to Strangers</td>
-                            <td>7</td>
-                            <td><span class="badge bg-warning">Taken</span></td>
-                            <td>{{ now()->format('j M Y') }} to {{ now()->subDays(-7)->format('j M Y') }}</td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-success" data-confirm-book-returned="true"
-                                            data-unique="4">
-                                            <span data-confirm-book-returned="true" data-unique="4"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a class="px-2 pt-2 btn btn-danger" data-confirm-user-destroy="true"
-                                            data-unique="4">
-                                            <span data-confirm-user-destroy="true" data-unique="4"
-                                                class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-
-                                    <div class="me-2">
-                                        <a href="/dashboard/receipts/4" class="px-2 pt-2 btn btn-info">
-                                            <span class="select-all fa-fw fa-lg fas"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        {{-- <tr>
-                            <td colspan="7">
-                                <p class="pt-3 text-center">Nothing :(</p>
-                            </td>
-                        </tr> --}}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7">
+                                    <p class="pt-3 text-center">Nothing :(</p>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

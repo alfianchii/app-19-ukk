@@ -8,17 +8,14 @@
 @section('content')
     {{-- Cover --}}
     <section class="hidden xl:block">
-        <div class="absolute right-0 -top-0 drop-shadow-2xl">
-            <svg width="674" height="713" viewBox="0 0 674 713" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M265.601 60.5414C269.865 50.6258 279.128 43.7654 289.856 42.5764L674 0V713H30.5588C9.00504 713 -5.51611 690.948 2.99935 671.148L265.601 60.5414Z"
-                    fill="#4475F2" />
-            </svg>
+        {{-- Down Shape --}}
+        <div class="absolute right-0 -top-[7%] drop-shadow-2xl">
+            <img id="down-shape" src="{{ asset('assets/shapes/down-shape.png') }}" alt="Down Shape">
         </div>
-        <div class="absolute right-0 -top-0 drop-shadow-2xl">
-            <svg width="720" height="713" viewBox="0 0 720 713" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0H720V713H473.7C456.467 713 440.449 704.126 431.31 689.516L0 0Z" fill="#4475F2" />
-            </svg>
+
+        {{-- Up Shape --}}
+        <div class="absolute right-0 -top-[7%] drop-shadow-2xl">
+            <img id="up-shape" src="{{ asset('assets/shapes/up-shape.png') }}" alt="Down Shape">
         </div>
     </section>
 
@@ -49,15 +46,15 @@
                 <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/Dompet Ayah Sepatu Ibu.png') }}"
                     alt="Dompet Ayah Sepatu Ibu">
             </div>
-            <div class="absolute top-0 right-[450px]">
+            <div class="absolute top-0 xl:right-52 min-[1850px]:right-[450px]">
                 <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/Talking to Strangers.png') }}"
                     alt="Talking to Strangers">
             </div>
-            <div class="absolute right-10 top-28">
+            <div class="absolute right-0 top-28">
                 <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/Laut Bercerita.png') }}"
                     alt="Laut Bercerita">
             </div>
-            <div class="absolute right-72 top-[350px]">
+            <div class="absolute xl:right-40 2xl:right-64 top-[350px]">
                 <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/The Visual MBA.png') }}"
                     alt="The Visual MBA">
             </div>
@@ -151,7 +148,8 @@
     </div>
 
     <div class="mt-[90px] grid grid-cols-1 lg:grid-cols-2">
-        <div class="flex flex-col items-center justify-center order-first mb-12 lg:mb-0 drop-shadow-2xl">
+        <div
+            class="flex flex-col items-center justify-center lg:flex-row lg:items-start lg:justify-start order-first mb-12 lg:mb-0 drop-shadow-2xl">
             <img class="rounded-lg" src="{{ asset('assets/images/Service.png') }}" alt="Service">
         </div>
 
@@ -177,7 +175,8 @@
                 just a click away!</p>
         </div>
 
-        <div class="flex flex-col items-center justify-center order-first mb-12 lg:order-last drop-shadow-2xl lg:mb-0">
+        <div
+            class="flex flex-col items-center justify-center lg:flex-row lg:items-end lg:justify-end order-first mb-12 lg:order-last drop-shadow-2xl lg:mb-0">
             <img class="rounded-lg" src="{{ asset('assets/images/Reading.png') }}" alt="Service">
         </div>
     </div>
@@ -190,65 +189,99 @@
     </div>
 
     <div class="mt-[90px] lg:flex lg:items-center space-y-16 lg:space-y-0 lg:gap-x-14">
-        <div
-            class="flex flex-col items-center justify-center flex-1 p-10 transition-all duration-300 bg-white border rounded-lg shadow-xl lg:w-1/4 hover:shadow-none border-pale-silver">
-            <div class="flex mb-4">
-                <div class="p-6 rounded-3xl">
-                    <img src="{{ asset('assets/images/Ahmad Saugi.png') }}" alt="Ahmad Saugi">
+        @if ($reviews->count() >= 3)
+            @foreach ($reviews as $review)
+                <div @auth style="cursor: pointer" onclick="window.location.href='/books/{{ $review->book->id_book }}'" @endauth
+                    class="flex flex-col items-center justify-center flex-1 p-10 transition-all duration-300 bg-white border rounded-lg shadow-xl lg:w-1/4 hover:shadow-none border-pale-silver">
+                    <div class="flex mb-4">
+                        <div class="p-6 rounded-3xl">
+                            @if ($review->user->profile_picture)
+                                <img width="150px" class="rounded-full"
+                                    src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                                    alt="{{ $review->user->full_name }}">
+                            @else
+                                <img width="150px" class="rounded-full"
+                                    src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
+                                    alt="{{ $review->user->full_name }}">
+                            @endif
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <p class="text-base line-clamp-2 tracking-wide text-center text-slate-grey">
+                            {!! $review->body !!}
+                        </p>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-base tracking-wide text-center text-sky-cyan">{{ $review->user->full_name }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-base tracking-wide text-center text-midnight-blue">
+                            {{ ucwords($review->user->role) }}</p>
+                    </div>
+                </div>
+            @endforeach
+        @else
+            <div
+                class="flex flex-col items-center justify-center flex-1 p-10 transition-all duration-300 bg-white border rounded-lg shadow-xl lg:w-1/4 hover:shadow-none border-pale-silver">
+                <div class="flex mb-4">
+                    <div class="p-6 rounded-3xl">
+                        <img src="{{ asset('assets/images/Ahmad Saugi.png') }}" alt="Ahmad Saugi">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <p class="text-base tracking-wide text-center text-slate-grey">Effortlessly find your next read
+                        with our powerful
+                        and
+                        intuitive book search.
+                    </p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base tracking-wide text-center text-sky-cyan">Ahmad Saugi</p>
+                </div>
+                <div>
+                    <p class="text-base tracking-wide text-center text-midnight-blue">College Student</p>
                 </div>
             </div>
-            <div class="mb-6">
-                <p class="text-base tracking-wide text-center text-slate-grey">Effortlessly find your next read
-                    with our powerful
-                    and
-                    intuitive book search.
-                </p>
-            </div>
-            <div class="mb-4">
-                <p class="text-base tracking-wide text-center text-sky-cyan">Ahmad Saugi</p>
-            </div>
-            <div>
-                <p class="text-base tracking-wide text-center text-midnight-blue">College Student</p>
-            </div>
-        </div>
-        <div
-            class="flex flex-col items-center justify-center flex-1 p-10 transition-all duration-300 bg-white border rounded-lg shadow-xl lg:w-1/4 hover:shadow-none border-pale-silver">
-            <div class="flex mb-4">
-                <div class="p-6 rounded-3xl">
-                    <img src="{{ asset('assets/images/Muhammad Alfian.png') }}" alt="Muhammad Alfian">
+            <div
+                class="flex flex-col items-center justify-center flex-1 p-10 transition-all duration-300 bg-white border rounded-lg shadow-xl lg:w-1/4 hover:shadow-none border-pale-silver">
+                <div class="flex mb-4">
+                    <div class="p-6 rounded-3xl">
+                        <img src="{{ asset('assets/images/Muhammad Alfian.png') }}" alt="Muhammad Alfian">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <p class="text-base tracking-wide text-center text-slate-grey">Thought-provoking narrative
+                        and rich prose. A must-read for
+                        any avid book lover!</p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base tracking-wide text-center text-sky-cyan">Muhammad Alfian</p>
+                </div>
+                <div>
+                    <p class="text-base tracking-wide text-center text-midnight-blue">Student</p>
                 </div>
             </div>
-            <div class="mb-6">
-                <p class="text-base tracking-wide text-center text-slate-grey">Thought-provoking narrative
-                    and rich prose. A must-read for
-                    any avid book lover!</p>
-            </div>
-            <div class="mb-4">
-                <p class="text-base tracking-wide text-center text-sky-cyan">Muhammad Alfian</p>
-            </div>
-            <div>
-                <p class="text-base tracking-wide text-center text-midnight-blue">Student</p>
-            </div>
-        </div>
-        <div
-            class="flex flex-col items-center justify-center flex-1 p-10 transition-all duration-300 bg-white border rounded-lg shadow-xl lg:w-1/4 hover:shadow-none border-pale-silver">
-            <div class="flex mb-4">
-                <div class="p-6 rounded-3xl">
-                    <img src="{{ asset('assets/images/Wahyu Amirulloh.png') }}" alt="Wahyu Amirulloh">
+            <div
+                class="flex flex-col items-center justify-center flex-1 p-10 transition-all duration-300 bg-white border rounded-lg shadow-xl lg:w-1/4 hover:shadow-none border-pale-silver">
+                <div class="flex mb-4">
+                    <div class="p-6 rounded-3xl">
+                        <img src="{{ asset('assets/images/Wahyu Amirulloh.png') }}" alt="Wahyu Amirulloh">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <p class="text-base tracking-wide text-center text-slate-grey">Immersive storytelling!
+                        An enriching literary experience
+                        worth savoring and sharing.</p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-base tracking-wide text-center text-sky-cyan">Wahyu Amirulloh</p>
+                </div>
+                <div>
+                    <p class="text-base tracking-wide text-center text-midnight-blue">ERP Developer</p>
                 </div>
             </div>
-            <div class="mb-6">
-                <p class="text-base tracking-wide text-center text-slate-grey">Immersive storytelling!
-                    An enriching literary experience
-                    worth savoring and sharing.</p>
-            </div>
-            <div class="mb-4">
-                <p class="text-base tracking-wide text-center text-sky-cyan">Wahyu Amirulloh</p>
-            </div>
-            <div>
-                <p class="text-base tracking-wide text-center text-midnight-blue">ERP Developer</p>
-            </div>
-        </div>
+        @endif
     </div>
 
     {{-- Location --}}
@@ -270,4 +303,5 @@
 @endsection
 
 @section('additional_scripts')
+    @vite('resources/js/base/shapes.js')
 @endsection

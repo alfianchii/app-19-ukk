@@ -32,10 +32,9 @@ class MasterBookController extends Controller
     public function index()
     {
         $theUser = Auth::user();
+        $books = MasterBook::with(["genres", "wishlists", "reviews", "createdBy"])->get();
 
         if ($theUser->role == "admin") {
-            $books = MasterBook::with(["genres", "wishlists", "reviews"])->get();
-
             $viewVariables = [
                 "title" => "Book",
                 "books" => $books,
@@ -44,8 +43,6 @@ class MasterBookController extends Controller
         };
 
         if ($theUser->role == "officer") {
-            $books = MasterBook::with(["genres", "wishlists", "reviews"])->get();
-
             $viewVariables = [
                 "title" => "Book",
                 "books" => $books,
@@ -59,9 +56,9 @@ class MasterBookController extends Controller
     public function create()
     {
         $theUser = Auth::user();
+        $genres = MasterGenre::where("flag_active", "Y")->get();
 
         if ($theUser->role == "admin") {
-            $genres = MasterGenre::where("flag_active", "Y")->get();
 
             $viewVariables = [
                 "title" => "Create Book",
@@ -73,6 +70,7 @@ class MasterBookController extends Controller
         if ($theUser->role == "officer") {
             $viewVariables = [
                 "title" => "Create Book",
+                "genres" => $genres,
             ];
             return view('pages.dashboard.actors.officer.books.create', $viewVariables);
         };
@@ -83,11 +81,10 @@ class MasterBookController extends Controller
     public function store(Request $request)
     {
         $theUser = Auth::user();
-        $rules = $this->rules;
-        $rules["year_published"][] = "max:" . now()->year;
+        $this->rules["year_published"][] = "max:" . now()->year;
 
         if ($theUser->role == "admin") {
-            $credentials = $request->validate($rules);
+            $credentials = $request->validate($this->rules);
             $credentials["created_by"] = $theUser->id_user;
 
             if ($request->has("cover")) $credentials["cover"] = $credentials["cover"]->store("book/covers");
@@ -98,7 +95,7 @@ class MasterBookController extends Controller
         };
 
         if ($theUser->role == "officer") {
-            $credentials = $request->validate($rules);
+            $credentials = $request->validate($this->rules);
             $credentials["created_by"] = $theUser->id_user;
 
             if ($request->has("cover")) $credentials["cover"] = $credentials["cover"]->store("book/covers");
@@ -115,9 +112,9 @@ class MasterBookController extends Controller
     {
         $theUser = Auth::user();
         $book = MasterBook::with(['genres'])->firstWhere("id_book", $book->id_book);
+        $genres = MasterGenre::where("flag_active", "Y")->get();
 
         if ($theUser->role == "admin") {
-            $genres = MasterGenre::where("flag_active", "Y")->get();
 
             $viewVariables = [
                 "title" => $book->title,
@@ -128,8 +125,6 @@ class MasterBookController extends Controller
         };
 
         if ($theUser->role == "officer") {
-            $genres = MasterGenre::where("flag_active", "Y")->get();
-
             $viewVariables = [
                 "title" => $book->title,
                 "book" => $book,
@@ -144,11 +139,10 @@ class MasterBookController extends Controller
     public function update(Request $request, MasterBook $book)
     {
         $theUser = Auth::user();
-        $rules = $this->rules;
-        $rules["year_published"][] = "max:" . now()->year;
+        $this->rules["year_published"][] = "max:" . now()->year;
 
         if ($theUser->role == "admin") {
-            $credentials = $request->validate($rules);
+            $credentials = $request->validate($this->rules);
             $credentials["updated_by"] = $theUser->id_user;
 
             if ($request->has("cover")) {
@@ -164,7 +158,7 @@ class MasterBookController extends Controller
         };
 
         if ($theUser->role == "officer") {
-            $credentials = $request->validate($rules);
+            $credentials = $request->validate($this->rules);
             $credentials["updated_by"] = $theUser->id_user;
 
             if ($request->has("cover")) {
@@ -230,6 +224,9 @@ class MasterBookController extends Controller
 
         $theUser = Auth::user();
         if ($theUser->role == "admin") {
+            if ($creds["table"] === "all-of-books") return (new AllOfBooksExport)->download($fileName, $writterType);
+        };
+        if ($theUser->role == "officer") {
             if ($creds["table"] === "all-of-books") return (new AllOfBooksExport)->download($fileName, $writterType);
         };
 

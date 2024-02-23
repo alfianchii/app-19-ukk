@@ -44,7 +44,7 @@
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" placeholder="e.g. Muhammad Alfian"
                                         id="full_name" name="full_name"
-                                        value="{{ old('full_name') ?? $user->full_name }}" />
+                                        value="{{ old('full_name', $user->full_name) ?? $user->full_name }}" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-person"></i>
                                     </div>
@@ -63,7 +63,7 @@
                                 <label for="nik" class="form-label">NIK</label>
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" placeholder="e.g. 1050241708900001"
-                                        id="nik" name="nik" value="{{ old('nik') ?? $user->nik }}"
+                                        id="nik" name="nik" value="{{ old('nik', $user->nik) ?? $user->nik }}"
                                         maxlength="16" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-person-vcard"></i>
@@ -83,7 +83,8 @@
                                 <label for="username" class="form-label">Username</label>
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" placeholder="e.g. alfianchii"
-                                        id="username" name="username" value="{{ old('username') ?? $user->username }}" />
+                                        id="username" name="username"
+                                        value="{{ old('username', $user->username) ?? $user->username }}" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-at"></i>
                                     </div>
@@ -102,7 +103,7 @@
                                 <label for="email" class="form-label">Email</label>
                                 <div class="position-relative">
                                     <input type="email" class="py-2 form-control" id="email" name="email"
-                                        value="{{ old('email') ?? $user->email }}"
+                                        value="{{ old('email', $user->email) ?? $user->email }}"
                                         placeholder="e.g. alfian.ganteng@gmail.com" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-envelope-paper"></i>
@@ -122,8 +123,9 @@
                                 <label for="phone" class="form-label">Phone</label>
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control" placeholder="e.g. 082384763478"
-                                        id="phone" name="phone" value="{{ old('phone') ?? $user->phone }}"
-                                        min="11" max="13" maxlength="13" />
+                                        id="phone" name="phone"
+                                        value="{{ old('phone', $user->phone) ?? $user->phone }}" min="11"
+                                        max="13" maxlength="13" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-telephone"></i>
                                     </div>
@@ -142,7 +144,7 @@
                                 <label for="born" class="form-label">Born</label>
                                 <div class="position-relative">
                                     <input type="date" class="py-2 form-control" id="born" name="born"
-                                        value="{{ old('born') ?? $user->born->format('Y-m-d') }}" />
+                                        value="{{ old('born', $user->born->format('Y-m-d')) ?? $user->born->format('Y-m-d') }}" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-calendar"></i>
                                     </div>
@@ -162,7 +164,7 @@
                                 <div class="position-relative">
                                     <input type="text" class="py-2 form-control"
                                         placeholder="e.g. Jl. Free Fire Factory, No. 1, Kla Only" id="address"
-                                        name="address" value="{{ old('address') ?? $user->address }}" />
+                                        name="address" value="{{ old('address', $user->address) ?? $user->address }}" />
                                     <div class="form-control-icon">
                                         <i class="py-2 bi bi-house"></i>
                                     </div>
@@ -176,7 +178,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-1 col-md-6 col-12">
+                        <div class="mb-1 col-md-3 col-12">
                             <div class="form-group mandatory @error('gender'){{ 'is-invalid' }}@enderror">
                                 <fieldset>
                                     <label class="form-label">
@@ -185,16 +187,16 @@
                                     <div class="mt-md-2 d-flex">
                                         <div class="form-check me-3">
                                             <input class="form-check-input" type="radio" name="gender"
-                                                id="gender-male" value="male"
-                                                @if ($user->gender == 'male') checked @endif>
+                                                @if (old('gender') ?? $user->gender === 'male') checked @endif id="gender-male"
+                                                value="male">
                                             <label class="form-check-label form-label" for="gender-male">
                                                 Male
                                             </label>
                                         </div>
                                         <div class="form-check me-3">
                                             <input class="form-check-input" type="radio" name="gender"
-                                                id="gender-female" value="female"
-                                                @if ($user->gender == 'female') checked @endif>
+                                                @if (old('gender') ?? $user->gender === 'female') checked @endif id="gender-female"
+                                                value="female">
                                             <label class="form-check-label form-label" for="gender-female">
                                                 Female
                                             </label>
@@ -210,39 +212,41 @@
                             </div>
                         </div>
 
-                        <div class="mb-1 col-md-6 col-12">
-                            <div class="form-group mandatory @error('role'){{ 'is-invalid' }}@enderror">
-                                <fieldset>
-                                    <label class="form-label">
-                                        Role
-                                    </label>
-                                    <div class="mt-md-2 d-flex">
-                                        <div class="form-check me-3">
-                                            <input class="form-check-input" type="radio" name="role"
-                                                id="role-officer" value="officer"
-                                                @if ($user->role == 'officer') checked @endif>
-                                            <label class="form-check-label form-label" for="role-officer">
-                                                Officer
-                                            </label>
+                        @if (auth()->user()->id_user !== $user->id_user)
+                            <div class="mb-1 col-md-3 col-12">
+                                <div class="form-group mandatory @error('role'){{ 'is-invalid' }}@enderror">
+                                    <fieldset>
+                                        <label class="form-label">
+                                            Role
+                                        </label>
+                                        <div class="mt-md-2 d-flex">
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="radio" name="role"
+                                                    @if (old('role') ?? $user->role === 'reader') checked @endif id="role-reader"
+                                                    value="reader">
+                                                <label class="form-check-label form-label" for="role-reader">
+                                                    Reader
+                                                </label>
+                                            </div>
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="radio" name="role"
+                                                    @if (old('role') ?? $user->role === 'officer') checked @endif id="role-officer"
+                                                    value="officer">
+                                                <label class="form-check-label form-label" for="role-officer">
+                                                    Officer
+                                                </label>
+                                            </div>
                                         </div>
-                                        <div class="form-check me-3">
-                                            <input class="form-check-input" type="radio" name="role"
-                                                id="role-reader" value="reader"
-                                                @if ($user->role == 'reader') checked @endif>
-                                            <label class="form-check-label form-label" for="role-reader">
-                                                Reader
-                                            </label>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                                    </fieldset>
 
-                                @error('role')
-                                    <div class="invalid-feedback d-block">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+                                    @error('role')
+                                        <div class="invalid-feedback d-block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
 
                     <div class="row">
@@ -254,9 +258,8 @@
                                         Picture</label>
 
                                     @if ($user->profile_picture)
-                                        <div class="mb-3 relative" data-confirm-user-profile-picture-destroy="true"
-                                            data-unique="{{ $user->id_user }}">
-                                            <a class="px-2 pt-2 btn btn-danger position-absolute"
+                                        <div class="mb-3 position-relative">
+                                            <a class="px-2 pt-2 position-absolute btn btn-danger"
                                                 data-confirm-user-profile-picture-destroy="true"
                                                 data-unique="{{ $user->id_user }}">
                                                 <span data-confirm-user-profile-picture-destroy="true"
@@ -264,9 +267,11 @@
                                                     class="select-all fa-fw fa-lg fas"></span>
                                             </a>
 
-                                            <img class="rounded-2" width="250"
-                                                src="{{ asset('storage/' . $user->profile_picture) }}"
-                                                alt="{{ $user->full_name }}">
+                                            <div class="d-block">
+                                                <img class="rounded-3" width="200px"
+                                                    src="{{ asset('storage/' . $user->profile_picture) }}"
+                                                    alt="User Avatar">
+                                            </div>
                                         </div>
                                     @endif
 

@@ -106,7 +106,7 @@ class UserController extends Controller
         };
 
         if ($theUser->role == "officer") {
-            if ($theUser === $user->id_user) {
+            if ($theUser->id_user === $user->id_user) {
                 $viewVariables = [
                     "title" => "@" . $user->username,
                     "user" => $user,
@@ -116,7 +116,7 @@ class UserController extends Controller
         };
 
         if ($theUser->role == "reader") {
-            if ($theUser === $user->id_user) {
+            if ($theUser->id_user === $user->id_user) {
                 $viewVariables = [
                     "title" => "@" . $user->username,
                     "user" => $user,
@@ -133,11 +133,33 @@ class UserController extends Controller
         $theUser = Auth::user();
 
         if ($theUser->role == "admin") {
+            if ($user->role === "admin" and $theUser->id_user !== $user->id_user) return view("errors.403");
+
             $viewVariables = [
                 "title" => "@" . $user->username,
                 "user" => $user,
             ];
             return view('pages.dashboard.actors.admin.users.edit', $viewVariables);
+        };
+
+        if ($theUser->role == "officer") {
+            if ($theUser->id_user !== $user->id_user) return view("errors.403");
+
+            $viewVariables = [
+                "title" => "@" . $user->username,
+                "user" => $user,
+            ];
+            return view('pages.dashboard.actors.custom.users.edit', $viewVariables);
+        };
+
+        if ($theUser->role == "reader") {
+            if ($theUser->id_user === $user->id_user) {
+                $viewVariables = [
+                    "title" => "@" . $user->username,
+                    "user" => $user,
+                ];
+                return view('pages.dashboard.actors.custom.users.edit', $viewVariables);
+            }
         };
 
         return view("errors.403");
@@ -148,13 +170,15 @@ class UserController extends Controller
         $theUser = Auth::user();
 
         if ($theUser->role == "admin") {
-            $rules = $this->rules;
+            if ($user->role === "admin" and $theUser->id_user !== $user->id_user) return view("errors.403");
 
+            $rules = $this->rules;
             unset($rules["password"], $rules['password_confirmation']);
-            if ($request->nik) unset($rules["nik"]);
-            if ($request->username) unset($rules["username"]);
-            if ($request->email) unset($rules["email"]);
-            if ($request->phone) unset($rules["phone"]);
+            if ($user->role === "admin") unset($rules["role"]);
+            if ($request->nik and $request->nik == $user->nik) unset($rules["nik"]);
+            if ($request->username and $request->username == $user->username) unset($rules["username"]);
+            if ($request->email and $request->email == $user->email) unset($rules["email"]);
+            if ($request->phone and $request->phone == $user->phone) unset($rules["phone"]);
             $credentials = $request->validate($rules);
             $credentials["full_name"] = ucwords($credentials["full_name"]);
             $credentials["updated_by"] = $theUser->id_user;
@@ -173,7 +197,75 @@ class UserController extends Controller
             }
 
             $user->update($credentials);
-            return redirect("/dashboard/users/$user->id_user")->withSuccess("The account of @$user->username has been created!");
+            return redirect("/dashboard/users/$user->id_user")->withSuccess("The account of @$user->username has been updated!");
+        };
+
+        if ($theUser->role == "officer") {
+            if ($theUser->id_user === $user->id_user) {
+                unset(
+                    $this->rules["nik"],
+                    $this->rules["gender"],
+                    $this->rules["role"],
+                    $this->rules["password"],
+                    $this->rules["password_confirmation"],
+                );
+                if ($request->username and $request->username == $user->username) unset($this->rules["username"]);
+                if ($request->email and $request->email == $user->email) unset($this->rules["email"]);
+                if ($request->phone and $request->phone == $user->phone) unset($this->rules["phone"]);
+                $credentials = $request->validate($this->rules);
+                $credentials["full_name"] = ucwords($credentials["full_name"]);
+                $credentials["updated_by"] = $theUser->id_user;
+
+                if ($request->has("profile_picture")) {
+                    if ($user->profile_picture) Storage::delete($user->profile_picture);
+
+                    $imageOriginalPath = $credentials["profile_picture"]->store("user/profile-pictures");
+                    $credentials["profile_picture"] = $imageOriginalPath;
+                    $croppedImage = Image::make("storage/" . $imageOriginalPath);
+                    $croppedImage->fit(1200, 1200, function ($constraint) {
+                        $constraint->upsize();
+                    }, "center");
+
+                    Storage::put($imageOriginalPath, $croppedImage->stream());
+                }
+
+                $user->update($credentials);
+                return redirect("/dashboard/users/$user->id_user")->withSuccess("Your account has been updated!");
+            }
+        };
+
+        if ($theUser->role == "student") {
+            if ($theUser->id_user === $user->id_user) {
+                unset(
+                    $this->rules["nik"],
+                    $this->rules["gender"],
+                    $this->rules["role"],
+                    $this->rules["password"],
+                    $this->rules["password_confirmation"],
+                );
+                if ($request->username and $request->username == $user->username) unset($this->rules["username"]);
+                if ($request->email and $request->email == $user->email) unset($this->rules["email"]);
+                if ($request->phone and $request->phone == $user->phone) unset($this->rules["phone"]);
+                $credentials = $request->validate($this->rules);
+                $credentials["full_name"] = ucwords($credentials["full_name"]);
+                $credentials["updated_by"] = $theUser->id_user;
+
+                if ($request->has("profile_picture")) {
+                    if ($user->profile_picture) Storage::delete($user->profile_picture);
+
+                    $imageOriginalPath = $credentials["profile_picture"]->store("user/profile-pictures");
+                    $credentials["profile_picture"] = $imageOriginalPath;
+                    $croppedImage = Image::make("storage/" . $imageOriginalPath);
+                    $croppedImage->fit(1200, 1200, function ($constraint) {
+                        $constraint->upsize();
+                    }, "center");
+
+                    Storage::put($imageOriginalPath, $croppedImage->stream());
+                }
+
+                $user->update($credentials);
+                return redirect("/dashboard/users/$user->id_user")->withSuccess("Your account has been updated!");
+            }
         };
 
         return view("errors.403");
@@ -229,23 +321,20 @@ class UserController extends Controller
     {
         $theUser = Auth::user();
 
-        if ($theUser->role == "admin") {
-            $theUser = Auth::user();
+        // You cannot alter admin's password
+        if ($user->role == "admin" and $theUser->id_user !== $user->id_user) return view("errors.403");
 
-            $rules = [
-                "password" => $this->rules["password"],
-                "password_confirmation" => $this->rules["password_confirmation"],
-            ];
+        $rules = [
+            "password" => $this->rules["password"],
+            "password_confirmation" => $this->rules["password_confirmation"],
+        ];
 
-            $credentials = $request->validate($rules);
-            $credentials["password"] = Hash::make($credentials["password"]);
-            $credentials["updated_by"] = $theUser->id_user;
+        $credentials = $request->validate($rules);
+        $credentials["password"] = Hash::make($credentials["password"]);
+        $credentials["updated_by"] = $theUser->id_user;
 
-            $user->update($credentials);
-            return redirect("/dashboard/users/$user->id_user")->withSuccess("The password of @$user->username has been updated!");
-        }
-
-        return view("errors.403");
+        $user->update($credentials);
+        return redirect("/dashboard/users/$user->id_user")->withSuccess("The password of @$user->username has been updated!");
     }
 
     public function destroyProfilePicture(User $user)

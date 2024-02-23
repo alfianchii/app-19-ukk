@@ -91,6 +91,7 @@
                             <th>Date</th>
                             <th>Status</th>
                             <th>Data</th>
+                            <th>Created</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -123,6 +124,14 @@
                                         <span class="badge bg-light-success">Active</span>
                                     @else
                                         <span class="badge bg-light-danger">Non-active</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($user->createdBy)
+                                        <a
+                                            href="/dashboard/users/{{ $user->createdBy->id_user }}">{{ '@' . $user->createdBy->username }}</a>
+                                    @else
+                                        <p>{{ $user->created_by }}</p>
                                     @endif
                                 </td>
                                 <td>
@@ -167,7 +176,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7">
+                                <td colspan="8">
                                     <p class="pt-3 text-center">Nothing :(</p>
                                 </td>
                             </tr>

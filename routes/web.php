@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\Home\{HomeController, BookController, GenreController};
 use App\Http\Controllers\Auth\{AuthController, RegisterController};
-use App\Http\Controllers\Dashboard\{MasterBookController, MasterGenreController, RecBookReceiptController, UserController};
+use App\Http\Controllers\Dashboard\{DashboardController, HistoryBookWishlistController, MasterBookController, MasterGenreController, RecBookReceiptController, RecBookReviewController, UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages.landing-page.home.index', ["title" => "Home"]);
-});
+Route::get('/', [HomeController::class, "index"]);
 
 // Authentication
 Route::get('/login', [AuthController::class, "index"])->middleware("guest");
@@ -30,28 +29,19 @@ Route::post('/register', [RegisterController::class, "register"]);
 
 // Landing Page
 // Book
-Route::get('/books', function () {
-    return view("pages.landing-page.books.index", ["title" => "Books"]);
-});
-Route::get('/books/1', function () {
-    return view("pages.landing-page.books.show", ["title" => "Dompet Ayah Sepatu Ibu"]);
-});
+Route::get('/books', [BookController::class, "index"]);
+Route::get('/books/{book:id_book}', [BookController::class, "show"]);
+Route::post('/books/{book:id_book}/reviewed', [BookController::class, "reviewed"]);
+
+// Wishlist
+Route::post('/books/{book:id_book}/wishlist', [BookController::class, "wishlist"]);
 
 // Genre
-Route::get('/genres', function () {
-    return view("pages.landing-page.genres.index", ["title" => "Genres"]);
-});
-
-// Review
-Route::get('/reviews', function () {
-    return view("pages.landing-page.reviews.index", ["title" => "Reviews"]);
-});
+Route::get('/genres', [GenreController::class, "index"]);
 
 // Dashboard
 Route::group(['prefix' => "dashboard", "middleware" => ["auth"]], function () {
-    Route::get('/', function () {
-        return view("pages.dashboard.actors.admin.index", ["title" => "Dashboard", "greeting" => "Good morning"]);
-    });
+    Route::get('/', [DashboardController::class, "index"]);
 
     // Genre
     Route::resource('/genres', MasterGenreController::class)->except(["show"]);
@@ -63,23 +53,19 @@ Route::group(['prefix' => "dashboard", "middleware" => ["auth"]], function () {
     Route::post("/books/export", [MasterBookController::class, "export"]);
 
     // Receipt
-    Route::resource('/receipts', RecBookReceiptController::class);
-    Route::get('/receipts/create', function () {
-        return view("pages.dashboard.actors.admin.receipts.create", ["title" => "Create Receipt"]);
-    });
+    Route::resource('/receipts', RecBookReceiptController::class)->except(["show", "update", "edit"]);
+    Route::put("/receipts/returned/{receipt:id_book_receipt}", [RecBookReceiptController::class, "returned"]);
+    Route::post("/receipts/export", [RecBookReceiptController::class, "export"]);
 
     // Review
-    Route::get('/reviews', function () {
-        return view("pages.dashboard.actors.admin.reviews.index", ["title" => "Review"]);
-    });
-    Route::get('/reviews/1/edit', function () {
-        return view("pages.dashboard.actors.admin.reviews.edit", ["title" => "Edit Review"]);
-    });
+    Route::resource('/reviews', RecBookReviewController::class);
+    Route::delete('/reviews/destroy-your-review-photo/{review:id_book_review}', [RecBookReviewController::class, "destroyYourReviewPhoto"]);
+    Route::post("/reviews/export", [RecBookReviewController::class, "export"]);
 
     // Wishlist
-    Route::get('/wishlists', function () {
-        return view("pages.dashboard.actors.admin.wishlists.index", ["title" => "Wishlist"]);
-    });
+    Route::get('/wishlists', [HistoryBookWishlistController::class, "index"]);
+    Route::delete('/wishlists/{wishlist:id_book_wishlist}', [HistoryBookWishlistController::class, "destroy"]);
+    Route::post("/wishlists/export", [HistoryBookWishlistController::class, "export"]);
 
     // User
     Route::resource('/users', UserController::class);

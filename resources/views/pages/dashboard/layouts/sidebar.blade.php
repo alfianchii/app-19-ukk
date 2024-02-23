@@ -45,7 +45,10 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
-                <li class="sidebar-item @if (Request::is('dashboard')) active @endif">
+                <li class="sidebar-item @if (Request::is('dashboard') or
+                        (Request::is('dashboard/users/' . auth()->user()->id_user) or
+                            str_contains(request()->url(), 'users/' . auth()->user()->id_user . '/edit')) and
+                            auth()->user()->role != 'admin') active @endif">
                     <a href="/dashboard" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
@@ -82,7 +85,7 @@
                 </li>
                 <li class="sidebar-item @if (Request::is('dashboard/wishlists*')) active @endif">
                     <a href="/dashboard/wishlists" class='sidebar-link'>
-                        <i class="bi bi-heart-fill"></i>
+                        <i class="bi bi-heart"></i>
                         <span>Wishlist</span>
                     </a>
                 </li>

@@ -22,4 +22,14 @@ class RecBookReceipt extends Model
     {
         return $this->belongsTo(User::class, "created_by", "id_user");
     }
+
+    public function book()
+    {
+        return $this->belongsTo(MasterBook::class, "id_book", "id_book");
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, "id_user", "id_user");
+    }
 }

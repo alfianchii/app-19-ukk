@@ -42,6 +42,6 @@ document.documentElement.addEventListener("click", function (event) {
                 method: "DELETE",
             },
             uri: "/dashboard/users/destroy-profile-picture",
-            redirect: "/dashboard/users",
+            redirect: `/dashboard/users/${unique}`,
         });
 });

@@ -17,7 +17,7 @@
     {{-- Navbar --}}
     @include('pages.landing-page.layouts.navbar')
 
-    <div class="h-screen px-8 mx-auto mt-32 lg:px-[100px]">
+    <div class="px-8 mx-auto mt-32 lg:px-[100px]">
         @yield('content')
 
         {{-- Footer --}}

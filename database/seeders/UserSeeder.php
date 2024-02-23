@@ -29,6 +29,7 @@ class UserSeeder extends Seeder
                 "flag_active" => "Y",
                 "role" => "admin",
                 "created_at" => now(),
+                "created_by" => "root",
             ],
             [
                 "id_user" => 2,
@@ -44,6 +45,7 @@ class UserSeeder extends Seeder
                 "flag_active" => "Y",
                 "role" => "admin",
                 "created_at" => now(),
+                "created_by" => "root",
             ],
             [
                 "id_user" => 3,
@@ -59,6 +61,7 @@ class UserSeeder extends Seeder
                 "flag_active" => "Y",
                 "role" => "officer",
                 "created_at" => now(),
+                "created_by" => 1,
             ],
             [
                 "id_user" => 4,
@@ -74,6 +77,7 @@ class UserSeeder extends Seeder
                 "flag_active" => "Y",
                 "role" => "reader",
                 "created_at" => now(),
+                "created_by" => 1,
             ],
             [
                 "id_user" => 5,
@@ -89,6 +93,7 @@ class UserSeeder extends Seeder
                 "flag_active" => "N",
                 "role" => "reader",
                 "created_at" => now(),
+                "created_by" => 1,
             ],
         ]);
     }

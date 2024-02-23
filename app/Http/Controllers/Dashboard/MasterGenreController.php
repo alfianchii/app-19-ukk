@@ -26,7 +26,7 @@ class MasterGenreController extends Controller
         $theUser = Auth::user();
 
         if ($theUser->role == "admin") {
-            $genres = MasterGenre::with(["books"])->get();
+            $genres = MasterGenre::with(["books", "createdBy"])->get();
 
             $viewVariables = [
                 "title" => "Genre",

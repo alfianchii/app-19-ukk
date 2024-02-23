@@ -15,10 +15,13 @@
                 <hr>
 
                 <div class="mb-4">
-                    <a href="/dashboard/users/{{ $user->id_user }}/edit" class="px-2 pt-2 btn btn-warning me-1">
-                        <span class="select-all fa-fw fa-lg fas"></span>
-                    </a>
-                    @if ($user->id_user !== auth()->user()->id_user)
+                    @if ($user->role !== 'admin' or $user->id_user == auth()->user()->id_user)
+                        <a href="/dashboard/users/{{ $user->id_user }}/edit" class="px-2 pt-2 btn btn-warning me-1">
+                            <span class="select-all fa-fw fa-lg fas"></span>
+                        </a>
+                    @endif
+
+                    @if ($user->role !== 'admin' and $user->id_user !== auth()->user()->id_user)
                         <a class="px-2 pt-2 btn btn-danger me-1" data-confirm-user-destroy="true"
                             data-unique="{{ $user->id_user }}">
                             <span data-confirm-user-destroy="true" data-unique="{{ $user->id_user }}"
@@ -82,6 +85,15 @@
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="font-bold">
+                                <p>Phone:
+                                    <span style="font-weight: 400;" class="text-muted">
+                                        {{ $user->phone }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="font-bold">
                                 <p>Gender:
                                     <span style="font-weight: 400;" class="text-muted">
                                         {{ ucwords($user->gender) }}
@@ -89,9 +101,24 @@
                                 </p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="font-bold">
                                 <p>Status: <span class="badge bg-primary">{{ ucwords($user->role) }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="font-bold">
+                                <p>Active:
+                                    <span style="font-weight: 400;" class="text-muted">
+                                        @if ($user->flag_active == 'Y')
+                                            Yes
+                                        @else
+                                            No
+                                        @endif
+                                    </span>
                                 </p>
                             </div>
                         </div>

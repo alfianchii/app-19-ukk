@@ -12,7 +12,7 @@ document.documentElement.addEventListener("click", function (event) {
                 verb: "mark as returned",
                 method: "PUT",
             },
-            uri: "/dashboard/receipts",
+            uri: "/dashboard/receipts/returned",
             redirect: "/dashboard/receipts",
         });
 

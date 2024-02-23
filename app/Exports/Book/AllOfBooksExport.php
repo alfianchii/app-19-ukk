@@ -23,22 +23,13 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class AllOfBooksExport extends DefaultValueBinder
 implements WithProperties, FromCollection, WithTitle, WithHeadings, WithMapping, WithCustomValueBinder, WithStyles
 {
-    // ---------------------------------
-    // TRAITS
     use Exportable;
 
-
-    // ---------------------------------
-    // PROPERTIES
-
-
-    // ---------------------------------
-    // CORES
     public function properties(): array
     {
         return [
             'title'          => 'All of Books Export',
-            'description'    => "Total of books which have registered on the Lidia",
+            'description'    => "Total of books which have registered on Lidia",
             'subject'        => 'Books',
             'keywords'       => 'Books,export,spreadsheet',
             'category'       => 'Books',
@@ -65,6 +56,7 @@ implements WithProperties, FromCollection, WithTitle, WithHeadings, WithMapping,
             'Author',
             'Publisher',
             'Year',
+            'Synopsis',
             'Stock',
             'Wishlist(s)',
             'Review(s)',
@@ -79,6 +71,7 @@ implements WithProperties, FromCollection, WithTitle, WithHeadings, WithMapping,
             $book->author,
             $book->publisher,
             $book->year_published,
+            strip_tags($book->synopsis),
             $book->stock,
             $book->wishlists->count(),
             $book->reviews->count(),

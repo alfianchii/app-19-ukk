@@ -1,9 +1,10 @@
-const path = window.location.pathname;
+import breakpoints from "../utils/breakpoints.js";
+import path from "../utils/path.js";
+
 const navbar = document.body.querySelector("#navbar");
 const navbarLogin = document.body.querySelector("#navbar-button-login");
 const navbarMenu = document.body.querySelector("#navbar-menu");
 const btnHumberger = document.body.querySelector("#button-humberger");
-const navbarLinks = document.body.querySelectorAll(".navbar-link");
 const humbergerClassList = [
     "absolute",
     "transition-all",
@@ -17,12 +18,6 @@ const humbergerClassList = [
     "px-8",
     "pt-4",
 ];
-const breakpoints = {
-    sm: 640,
-    md: 768,
-    lg: 1024,
-    xl: 1280,
-};
 
 const scroll = () => navbarChangeBehaviour(navbar, navbarLogin);
 const navbarChangeOnDown = (nav, navLogin) => {

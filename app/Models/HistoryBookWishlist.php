@@ -12,4 +12,14 @@ class HistoryBookWishlist extends Model
     protected $table = "history_book_wishlists";
     protected $primaryKey = "id_book_wishlist";
     protected $guarded = ["id_book_wishlist"];
+
+    public function book()
+    {
+        return $this->belongsTo(MasterBook::class, "id_book", "id_book");
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, "id_user", "id_user");
+    }
 }

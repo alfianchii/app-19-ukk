@@ -120,7 +120,10 @@
                                 <td>{{ $book->stock }}</td>
                                 <td>{{ $book->wishlists->count() }}</td>
                                 <td>{{ $book->reviews->count() }}</td>
-                                <td>{{ $book->createdBy->full_name }}</td>
+                                <td>
+                                    <a
+                                        href="/dashboard/users/{{ $book->createdBy->id_user }}">{{ '@' . $book->createdBy->username }}</a>
+                                </td>
                                 <td>
                                     <div class="d-flex">
                                         <div class="me-2">

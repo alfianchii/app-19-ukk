@@ -38,7 +38,7 @@ implements WithProperties, FromCollection, WithTitle, WithHeadings, WithMapping,
     {
         return [
             'title'          => 'All of Genres Export',
-            'description'    => "Total of genres which have registered on the Lidia",
+            'description'    => "Total of genres which have registered on Lidia",
             'subject'        => 'Genres',
             'keywords'       => 'Genres,export,spreadsheet',
             'category'       => 'Genres',

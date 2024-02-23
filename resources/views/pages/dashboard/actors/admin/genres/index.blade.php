@@ -101,7 +101,10 @@
                                 <td>{{ $genre->name }}</td>
                                 <td>{{ $genre->description }}</td>
                                 <td>{{ $genre->books->count() }}</td>
-                                <td>{{ $genre->createdBy->full_name }}</td>
+                                <td>
+                                    <a
+                                        href="/dashboard/users/{{ $genre->createdBy->id_user }}">{{ '@' . $genre->createdBy->username }}</a>
+                                </td>
                                 <td>
                                     @if ($genre->flag_active == 'Y')
                                         <span class="badge bg-light-success">Y</span>

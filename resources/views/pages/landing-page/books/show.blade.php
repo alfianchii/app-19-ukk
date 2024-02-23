@@ -40,8 +40,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="m1 9 4-4-4-4" />
                     </svg>
-                    <span class="text-sm font-medium text-slate-grey ms-1 md:ms-2 line-clamp-1">Dompet Ayah Sepatu
-                        Ibu</span>
+                    <span class="text-sm font-medium text-slate-grey ms-1 md:ms-2 line-clamp-1">{{ $book->title }}</span>
                 </div>
             </li>
         </ol>
@@ -51,42 +50,46 @@
     <section class="pt-10">
         <div class="flex flex-col md:flex-row">
             <div class="flex-shrink-0 w-full px-4 mb-6 md:w-5/12 lg:w-3/12 md:mb-0">
-                <img class="mx-auto rounded-lg shadow-2xl md:mx-0"
-                    src="{{ asset('assets/images/Dompet Ayah Sepatu Ibu.png') }}" alt="Dompet Ayah Sepatu Ibu">
+                @if ($book->cover)
+                    <img alt="{{ $book->title }}" loading="lazy" decoding="async"
+                        class="mx-auto transition-all duration-300 rounded-lg shadow-2xl hover:shadow-none md:mx-0"
+                        src="{{ asset('storage/' . $book->cover) }}" width="200">
+                @else
+                    <img alt="{{ $book->title }}" loading="lazy" decoding="async"
+                        class="mx-auto transition-all duration-300 rounded-lg md:mx-0"
+                        src="{{ asset('assets/no-image-y.png') }}" width="200">
+                @endif
             </div>
 
             <div class="w-full px-4 mt-8 md:w-7/12 lg:w-9/12 md:mt-0">
                 <h2 class="text-3xl font-semibold tracking-wide text-center md:text-start lg:text-5xl text-midnight-blue">
-                    📚• Dompet Ayah Sepatu
-                    Ibu
+                    📚• {{ $book->title }}
                 </h2>
-                <h3 class="text-3xl font-semibold tracking-wider text-center uppercase md:text-start mt-7 text-sky-cyan">J.
-                    S. Khairen</h3>
-                <p class="leading-loose mt-7 text-slate-grey">The world is evil and you lost? Look at the palm of your hand.
-                    Father always forged that hand to not give up. Mom never stops holding that hand to pray. Rise up to
-                    take a
-                    step. This is the story of a father and mother, whose love was born even before you were born, whose
-                    love
-                    grew even before you grew. This is a story of fathers and mothers, whose tears can light a fire, whose
-                    tears
-                    can put out a fire. The hottest fire is lit when mom and dad cry in disappointment. The hottest fire is
-                    extinguished by mom and dad's tears of struggle. So, always remember home.</p>
+                <h3 class="text-3xl font-semibold tracking-wider text-center uppercase md:text-start mt-7 text-sky-cyan">
+                    {{ $book->author }}</h3>
+                <p class="leading-loose mt-7 text-slate-grey">{!! $book->synopsis !!}</p>
 
                 <div class="mt-8 space-y-3">
-                    <p class="font-semibold text-midnight-blue">Year: <span class="font-normal">2023</span></p>
-                    <p class="font-semibold text-midnight-blue">Publisher:
-                        <span class="font-normal">Gramedia Widia Sarana Indonesia</span>
+                    <p class="font-semibold text-midnight-blue">📅 Year: <span
+                            class="font-normal">{{ $book->year_published }}</span></p>
+                    <p class="font-semibold text-midnight-blue">🏠 Publisher:
+                        <span class="font-normal">{{ $book->publisher }}</span>
                     </p>
-                    <p class="font-semibold text-midnight-blue">Stock: <span class="font-normal">3</span></p>
-                    <p class="font-semibold text-midnight-blue">Review: <span class="font-normal">324</span>
-                    <p class="font-semibold text-midnight-blue">Wishlist: <span class="font-normal">1319</span>
+                    <p class="font-semibold text-midnight-blue">📄 Stock: <span
+                            class="font-normal">{{ $book->stock }}</span>
+                    </p>
+                    <p class="font-semibold text-midnight-blue">✏️ Review: <span
+                            class="font-normal">{{ $book->reviews->count() }}</span>
+                    <p class="font-semibold text-midnight-blue">❤️ Wishlist: <span
+                            class="font-normal">{{ $book->wishlists->count() }}</span>
                     </p>
                     <p class="font-semibold text-midnight-blue">Genre:
-                        <span
-                            class="bg-blue-100 text-dodger-blue text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 inline-block mb-2">Fiction</span>
-                        <span
-                            class="bg-blue-100 text-dodger-blue text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 inline-block mb-2">Slice
-                            of Life</span>
+                        @foreach ($book->genres as $genre)
+                            <a href="/books?genre={{ $genre->id_genre }}">
+                                <span
+                                    class="transition-all duration-300 hover:bg-dodger-blue hover:text-white bg-blue-100 text-dodger-blue text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 inline-block mb-2">{{ $genre->name }}</span>
+                            </a>
+                        @endforeach
                     </p>
                 </div>
             </div>
@@ -109,14 +112,14 @@
                                 alt="User Avatar" />
                         @endif
                     </div>
-                    <div class="mt-6 lg:mt-0 lg:ml-6">
+                    <div class="mt-6 lg:mt-0 lg:ml-6 w-full">
                         <h3
                             class="mb-2 text-2xl font-semibold text-center transition-all duration-300 text-midnight-blue hover:text-midnight-blue/60 lg:text-start">
-                            Alfian</h3>
+                            {{ auth()->user()->full_name }}</h3>
 
-                        <form class="mt-8" action="/dashboard/reviews/1" method="POST" enctype="multipart/form-data">
+                        <form class="mt-8" action="/books/{{ $book->id_book }}/reviewed" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
 
                             <div class="mb-1">
                                 <label for="body" class="block mb-2 text-sm font-bold text-midnight-blue">Review</label>
@@ -127,7 +130,7 @@
                                 </div>
 
                                 @error('body')
-                                    <p class="mt-2 text-red-500">Error message</p>
+                                    <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -137,7 +140,7 @@
                                 <input type="file" class="image-preview-filepond" name="photo" id="photo" />
 
                                 @error('profile_picture')
-                                    <p class="-mt-2 text-red-500">Error message</p>
+                                    <p class="mt-2 text-xs text-red-500">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -151,91 +154,56 @@
                 </div>
             </div>
 
-            <hr class="my-10">
+            <hr class="mt-10">
 
             {{-- Other's Review --}}
-            <div class="mb-6">
+            <div class="mt-6">
                 <h2 class="text-3xl font-semibold tracking-wide text-midnight-blue">Other's Review</h2>
 
-                <div>
-                    <div class="flex flex-col justify-center mt-10 lg:justify-start lg:flex-row">
-                        <div
-                            class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
-                            @if (auth()?->user()?->profile_picture)
-                                <img width="60" class="rounded-full"
-                                    src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
-                            @else
-                                <img width="60" class="rounded-full"
-                                    src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />
-                            @endif
-                        </div>
-                        <div class="mt-6 lg:mt-0 lg:ml-6">
-                            <h3
-                                class="mb-2 text-base font-semibold text-center transition-all duration-300 lg:text-start text-midnight-blue hover:text-midnight-blue/60">
-                                Nugraha</h3>
-                            <p class="text-sm text-center lg:text-start text-slate-grey">{{ now()->diffForHumans() }}</p>
+                @forelse ($reviews as $review)
+                    <div class="border-b border-pale-silver pb-5">
+                        <div class="flex flex-col justify-center mt-10 lg:justify-start lg:flex-row">
+                            <div
+                                class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
+                                @if ($review->user->profile_picture)
+                                    <img width="60" class="rounded-full"
+                                        src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                                        alt="User Avatar" />
+                                @else
+                                    <img width="60" class="rounded-full"
+                                        src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />
+                                @endif
+                            </div>
+                            <div class="mt-6 lg:mt-0 lg:ml-6 w-full">
+                                <h3
+                                    class="mb-2 text-base font-semibold text-center transition-all duration-300 lg:text-start text-midnight-blue hover:text-midnight-blue/60">
+                                    {{ $review->user->full_name }}</h3>
+                                <p class="text-sm text-center lg:text-start text-slate-grey">
+                                    {{ $review->created_at->diffForHumans() }}
+                                </p>
 
-                            <p class="mt-5 text-slate-grey">"Dompet Ayah Sepatu Ibu" is a thought-provoking puzzle that
-                                keeps
-                                readers guessing until the very end. With its intricate plot twists and enigmatic
-                                characters, this book is a captivating rollercoaster ride through the depths of space and
-                                time. While some may find the narrative challenging to follow, those who persevere will be
-                                rewarded with a profound meditation on the nature of reality.</p>
+                                <div class="mt-5 text-slate-grey text-center lg:text-start">{!! $review->body !!}</div>
+
+                                @if ($review->photo)
+                                    <div class="mt-2">
+                                        <img class="rounded mx-auto lg:mx-0"
+                                            src="{{ asset('storage/' . $review->photo) }}" alt="Review's Photo">
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <div class="flex flex-col justify-center mt-10 lg:justify-start lg:flex-row">
-                        <div
-                            class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
-                            @if (auth()?->user()?->profile_picture)
-                                <img width="60" class="rounded-full"
-                                    src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
-                            @else
-                                <img width="60" class="rounded-full"
-                                    src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />
-                            @endif
-                        </div>
-                        <div class="mt-6 lg:mt-0 lg:ml-6">
-                            <h3
-                                class="mb-2 text-base font-semibold text-center transition-all duration-300 lg:text-start text-midnight-blue hover:text-midnight-blue/60">
-                                Moepoi</h3>
-                            <p class="text-sm text-center lg:text-start text-slate-grey">{{ now()->diffForHumans() }}</p>
 
-                            <p class="mt-5 text-slate-grey">While "Dompet Ayah Sepatu Ibu" promises an intriguing
-                                exploration of time and eternity, its execution falls short. The plot is convoluted, with
-                                too many characters and subplots vying for attention. The philosophical musings feel forced
-                                at times, detracting from the overall coherence of the narrative. Despite moments of
-                                brilliance, the book ultimately fails to deliver a satisfying resolution to its central
-                                mysteries.</p>
-                        </div>
+                @empty
+                    <div class="my-10">
+                        <p class="text-slate-grey italic text-center">There is no review :(</p>
                     </div>
-                </div>
-                <div>
-                    <div class="flex flex-col justify-center mt-10 lg:justify-start lg:flex-row">
-                        <div
-                            class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
-                            @if (auth()?->user()?->profile_picture)
-                                <img width="60" class="rounded-full"
-                                    src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
-                            @else
-                                <img width="60" class="rounded-full"
-                                    src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />
-                            @endif
-                        </div>
-                        <div class="mt-6 lg:mt-0 lg:ml-6">
-                            <h3
-                                class="mb-2 text-base font-semibold text-center transition-all duration-300 lg:text-start text-midnight-blue hover:text-midnight-blue/60">
-                                Ogi</h3>
-                            <p class="text-sm text-center lg:text-start text-slate-grey">{{ now()->diffForHumans() }}</p>
+                @endforelse
 
-                            <p class="mt-5 text-slate-grey">Prepare to have your mind blown by "Dompet Ayah Sepatu Ibu".
-                                This book seamlessly blends elements of science fiction, fantasy, and metaphysics to create
-                                a truly unique reading experience. The author's imagination knows no bounds, crafting a
-                                world where time is fluid and reality is mutable. With its vivid imagery and captivating
-                                storytelling, this book will leave you pondering the nature of existence long after you've
-                                turned the final page.</p>
-                        </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-center" id="pagin-links">
+                        {{-- Pagination --}}
+                        {{ $reviews->links() }}
                     </div>
                 </div>
             </div>

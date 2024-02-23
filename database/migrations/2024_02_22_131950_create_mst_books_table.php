@@ -19,7 +19,7 @@ return new class extends Migration
             $table->year("year_published");
             $table->text("synopsis");
             $table->string("cover")->nullable();
-            $table->integer("stock");
+            $table->unsignedBigInteger("stock");
 
             $table->string("created_by")->nullable();
             $table->string("updated_by")->nullable();
