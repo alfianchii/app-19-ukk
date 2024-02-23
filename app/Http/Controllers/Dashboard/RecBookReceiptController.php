@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Exports\Book\Receipt\AllOfReceiptsExport;
+use App\Exports\Book\Receipt\YourReceiptsExport;
 use App\Http\Controllers\Controller;
 use App\Models\MasterBook;
 use App\Models\RecBookReceipt;
@@ -28,11 +29,11 @@ class RecBookReceiptController extends Controller
     // CORES
     public function index()
     {
-        $user = Auth::user();
-        $receipts = RecBookReceipt::with(["book", "user", "createdBy"])->get()->sortByDesc("created_at");
+        $theUser = Auth::user();
+        $receipts = RecBookReceipt::with(["book", "user", "createdBy"])->latest()->get()->sortByDesc("created_at");
 
         // Admin
-        if ($user->role === "admin") {
+        if ($theUser->role === "admin") {
             $viewVariables = [
                 "title" => "Receipt",
                 "receipts" => $receipts,
@@ -41,7 +42,7 @@ class RecBookReceiptController extends Controller
         }
 
         // Officer
-        if ($user->role === "officer") {
+        if ($theUser->role === "officer") {
             $viewVariables = [
                 "title" => "Receipt",
                 "receipts" => $receipts,
@@ -50,10 +51,10 @@ class RecBookReceiptController extends Controller
         }
 
         // Reader
-        if ($user->role === "reader") {
+        if ($theUser->role === "reader") {
             $viewVariables = [
                 "title" => "Receipt",
-                "receipts" => $receipts->where("id_user", $user->id_user),
+                "receipts" => $receipts->where("id_user", $theUser->id_user),
             ];
             return view("pages.dashboard.actors.reader.receipts.index", $viewVariables);
         }
@@ -63,12 +64,12 @@ class RecBookReceiptController extends Controller
 
     public function create()
     {
-        $user = Auth::user();
+        $theUser = Auth::user();
         $users = User::where("role", "reader")->where("flag_active", "Y")->get();
         $books = MasterBook::all();
 
         // Admin
-        if ($user->role === "admin") {
+        if ($theUser->role === "admin") {
             $viewVariables = [
                 "title" => "Create Receipt",
                 "users" => $users,
@@ -78,7 +79,7 @@ class RecBookReceiptController extends Controller
         }
 
         // Officer
-        if ($user->role === "officer") {
+        if ($theUser->role === "officer") {
             $viewVariables = [
                 "title" => "Create Receipt",
                 "users" => $users,
@@ -92,9 +93,9 @@ class RecBookReceiptController extends Controller
 
     public function store(Request $request)
     {
-        $user = Auth::user();
+        $theUser = Auth::user();
         // Admin
-        if ($user->role === "admin") {
+        if ($theUser->role === "admin") {
             $credentials = $request->validate($this->rules);
             $credentials["created_by"] = Auth::user()->id_user;
             $book = MasterBook::firstWhere("id_book", $credentials["id_book"]);
@@ -108,7 +109,7 @@ class RecBookReceiptController extends Controller
         }
 
         // Officer
-        if ($user->role === "officer") {
+        if ($theUser->role === "officer") {
             $credentials = $request->validate($this->rules);
             $credentials["created_by"] = Auth::user()->id_user;
             $book = MasterBook::firstWhere("id_book", $credentials["id_book"]);
@@ -126,14 +127,14 @@ class RecBookReceiptController extends Controller
 
     public function returned(RecBookReceipt $receipt)
     {
-        $user = Auth::user();
+        $theUser = Auth::user();
         $receipt = RecBookReceipt::with(["user"])->firstWhere("id_book_receipt", $receipt->id_book_receipt);
 
         try {
             $fields = [
                 "date_returned" => now(),
                 "status" => "returned",
-                "updated_by" => $user->id_user,
+                "updated_by" => $theUser->id_user,
             ];
             $receipt->update($fields);
             if ($receipt->user->flag_active === "N") $receipt->user->update(["flag_active" => "Y"]);
@@ -167,6 +168,9 @@ class RecBookReceiptController extends Controller
         };
         if ($theUser->role == "officer") {
             if ($creds["table"] === "all-of-receipts") return (new AllOfReceiptsExport)->download($fileName, $writterType);
+        };
+        if ($theUser->role == "reader") {
+            if ($creds["table"] === "your-receipts") return (new YourReceiptsExport)->forIdUser($theUser->id_user)->download($fileName, $writterType);
         };
 
         return view("errors.403");

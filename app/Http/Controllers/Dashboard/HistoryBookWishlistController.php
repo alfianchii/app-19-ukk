@@ -16,11 +16,11 @@ class HistoryBookWishlistController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        $theUser = Auth::user();
         // Admin
-        if ($user->role === "admin") {
+        if ($theUser->role === "admin") {
             $wishlists = HistoryBookWishlist::with(["user", "book.genres"])->get();
-            $yourWishlists = HistoryBookWishlist::with(["user", "book.genres"])->where("id_user", $user->id_user)->get();
+            $yourWishlists = HistoryBookWishlist::with(["user", "book.genres"])->where("id_user", $theUser->id_user)->get();
 
             $viewVariables = [
                 "title" => "Wishlist",
@@ -31,9 +31,9 @@ class HistoryBookWishlistController extends Controller
         }
 
         // Officer
-        if ($user->role === "officer") {
+        if ($theUser->role === "officer") {
             $wishlists = HistoryBookWishlist::with(["user", "book.genres"])->get();
-            $yourWishlists = HistoryBookWishlist::with(["user", "book.genres"])->where("id_user", $user->id_user)->get();
+            $yourWishlists = HistoryBookWishlist::with(["user", "book.genres"])->where("id_user", $theUser->id_user)->get();
 
             $viewVariables = [
                 "title" => "Wishlist",
@@ -44,8 +44,8 @@ class HistoryBookWishlistController extends Controller
         }
 
         // Reader
-        if ($user->role === "reader") {
-            $yourWishlists = HistoryBookWishlist::with(["user", "book.genres"])->where("id_user", $user->id_user)->get();
+        if ($theUser->role === "reader") {
+            $yourWishlists = HistoryBookWishlist::with(["user", "book.genres"])->where("id_user", $theUser->id_user)->get();
 
             $viewVariables = [
                 "title" => "Wishlist",
@@ -59,10 +59,10 @@ class HistoryBookWishlistController extends Controller
 
     public function destroy(HistoryBookWishlist $wishlist)
     {
-        $user = Auth::user();
+        $theUser = Auth::user();
 
         try {
-            if ($wishlist->id_user !== $user->id_user) throw new \Exception("You cannot remove other's wishlist.");
+            if ($wishlist->id_user !== $theUser->id_user) throw new \Exception("You cannot remove other's wishlist.");
             if (!HistoryBookWishlist::destroy($wishlist->id_book_wishlist)) throw new \Exception("Error removing wishlist.");
         } catch (\PDOException | ModelNotFoundException | QueryException | \Exception $e) {
             return $this->responseJsonMessage($e->getMessage(), 500);

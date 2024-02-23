@@ -167,7 +167,7 @@
                                         class="form-label @error('profile_picture'){{ 'text-danger' }}@enderror">Profile
                                         Picture</label>
 
-                                    @if ($user->profile_picture)
+                                    @if ($user->profile_picture && !str_contains($user->profile_picture, 'images/'))
                                         <div class="mb-3 position-relative">
                                             <a class="px-2 pt-2 position-absolute btn btn-danger"
                                                 data-confirm-user-profile-picture-destroy="true"

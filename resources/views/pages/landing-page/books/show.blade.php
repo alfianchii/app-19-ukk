@@ -51,12 +51,18 @@
         <div class="flex flex-col md:flex-row">
             <div class="flex-shrink-0 w-full px-4 mb-6 md:w-5/12 lg:w-3/12 md:mb-0">
                 @if ($book->cover)
-                    <img alt="{{ $book->title }}" loading="lazy" decoding="async"
-                        class="mx-auto transition-all duration-300 rounded-lg shadow-2xl hover:shadow-none md:mx-0"
-                        src="{{ asset('storage/' . $book->cover) }}" width="200">
+                    @if (File::exists(public_path('assets/' . $book->cover)))
+                        <img class="mx-auto transition-all duration-300 rounded-lg shadow-2xl hover:shadow-none md:mx-0"
+                            src="{{ asset('assets/' . $book->cover) }}" alt="{{ $book->title }}" loading="lazy"
+                            decoding="async" width="200" />
+                    @else
+                        <img class="mx-auto transition-all duration-300 rounded-lg shadow-2xl hover:shadow-none md:mx-0"
+                            src="{{ asset('storage/' . $book->cover) }}" alt="{{ $book->title }}" loading="lazy"
+                            decoding="async" width="200" />
+                    @endif
                 @else
-                    <img alt="{{ $book->title }}" loading="lazy" decoding="async"
-                        class="mx-auto transition-all duration-300 rounded-lg md:mx-0"
+                    <img class="mx-auto transition-all duration-300 rounded-lg md:mx-0" alt="{{ $book->title }}"
+                        loading="lazy" decoding="async" class="mx-auto rounded-lg md:mx-0"
                         src="{{ asset('assets/no-image-y.png') }}" width="200">
                 @endif
             </div>
@@ -104,12 +110,15 @@
 
                 <div class="flex flex-col justify-center mt-10 lg:justify-start lg:flex-row">
                     <div class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
-                        @if (auth()?->user()?->profile_picture)
-                            <img width="60" class="rounded-full"
-                                src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User Avatar" />
+                        @if (auth()->user()->profile_picture)
+                            @if (File::exists(public_path('assets/' . auth()->user()->profile_picture)))
+                                <img src="{{ asset('assets/' . auth()->user()->profile_picture) }}"
+                                    alt="{{ auth()->user()->full_name }}" />
+                            @else
+                                <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="Avatar">
+                            @endif
                         @else
-                            <img width="60" class="rounded-full" src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
-                                alt="User Avatar" />
+                            <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="Avatar">
                         @endif
                     </div>
                     <div class="mt-6 lg:mt-0 lg:ml-6 w-full">
@@ -135,7 +144,8 @@
                             </div>
 
                             <div class="mt-5">
-                                <label for="photo" class="block mb-2 text-sm font-bold text-midnight-blue">Photo</label>
+                                <label for="photo"
+                                    class="block mb-2 text-sm font-bold text-midnight-blue">Photo</label>
 
                                 <input type="file" class="image-preview-filepond" name="photo" id="photo" />
 
@@ -166,9 +176,15 @@
                             <div
                                 class="flex items-center justify-center flex-shrink-0 transition-all rounded-lg lg:w-16 lg:h-16">
                                 @if ($review->user->profile_picture)
-                                    <img width="60" class="rounded-full"
-                                        src="{{ asset('storage/' . $review->user->profile_picture) }}"
-                                        alt="User Avatar" />
+                                    @if (File::exists(public_path('assets/' . $review->user->profile_picture)))
+                                        <img width="60" class="rounded-full"
+                                            src="{{ asset('assets/' . $review->user->profile_picture) }}"
+                                            alt="User Avatar" alt="User Avatar" />
+                                    @else
+                                        <img width="60" class="rounded-full"
+                                            src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                                            alt="User Avatar" />
+                                    @endif
                                 @else
                                     <img width="60" class="rounded-full"
                                         src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />

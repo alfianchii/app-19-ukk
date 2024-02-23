@@ -11,16 +11,11 @@
     <div class="page-title">
         <div class="row">
             <div class="order-last col-12 col-md-6 order-md-1">
-                <h3>Receipt</h3>
+                <h3>Your Receipt</h3>
                 <p class="text-subtitle text-muted">This is a list of all receipts that have been made by the admin or
                     officer.
                 </p>
                 <hr>
-                <div class="mb-4">
-                    <a href="/dashboard/receipts/create" class="px-2 pt-2 btn btn-success me-1">
-                        <span class="text-white select-all fa-fw fa-lg fas"></span> Create Receipt
-                    </a>
-                </div>
             </div>
             <div class="order-first col-12 col-md-6 order-md-2">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -36,7 +31,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex flex-column flex-md-row justify-content-between" style="row-gap: 1rem;">
-                    <h4>Receipt</h4>
+                    <h4>Your Receipt</h4>
 
                     <div class="dropdown dropdown-color-icon d-flex justify-content-start">
                         <button class="btn btn-primary dropdown-toggle" type="button" id="export"
@@ -46,7 +41,7 @@
                         <div class="dropdown-menu" aria-labelledby="export">
                             <form action="/dashboard/receipts/export" method="POST">
                                 @csrf
-                                <input type="hidden" name="table" value="all-of-receipts">
+                                <input type="hidden" name="table" value="your-receipts">
                                 <input type="hidden" name="type" value="XLSX">
                                 <button type="submit" class="dropdown-item">
                                     <span class="select-all fa-fw far text-light"></span> Excel
@@ -55,7 +50,7 @@
 
                             <form action="/dashboard/receipts/export" method="POST">
                                 @csrf
-                                <input type="hidden" name="table" value="all-of-receipts">
+                                <input type="hidden" name="table" value="your-receipts">
                                 <input type="hidden" name="type" value="CSV">
                                 <button type="submit" class="dropdown-item">
                                     <span class="select-all fa-fw fas text-light"></span> CSV
@@ -64,7 +59,7 @@
 
                             <form action="/dashboard/receipts/export" method="POST">
                                 @csrf
-                                <input type="hidden" name="table" value="all-of-receipts">
+                                <input type="hidden" name="table" value="your-receipts">
                                 <input type="hidden" name="type" value="HTML">
                                 <button type="submit" class="dropdown-item">
                                     <span class="select-all fa-fw fab text-light"></span> HTML
@@ -73,7 +68,7 @@
 
                             <form action="/dashboard/receipts/export" method="POST">
                                 @csrf
-                                <input type="hidden" name="table" value="all-of-receipts">
+                                <input type="hidden" name="table" value="your-receipts">
                                 <input type="hidden" name="type" value="MPDF">
                                 <button type="submit" class="dropdown-item">
                                     <span class="select-all fa-fw far text-light"></span> PDF
@@ -88,7 +83,6 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Reader</th>
                             <th>Book</th>
                             <th>Amount</th>
                             <th>Status</th>
@@ -100,7 +94,6 @@
                         @forelse ($receipts as $receipt)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $receipt->user->full_name }}</td>
                                 <td>{{ $receipt->book->title }}</td>
                                 <td>{{ $receipt->amount }}</td>
                                 <td>
@@ -113,17 +106,6 @@
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        @if ($receipt->status === 'taken' || $receipt->status === 'overdue')
-                                            <div class="me-2">
-                                                <a class="px-2 pt-2 btn btn-success" data-confirm-book-returned="true"
-                                                    data-unique="{{ $receipt->id_book_receipt }}">
-                                                    <span data-confirm-book-returned="true"
-                                                        data-unique="{{ $receipt->id_book_receipt }}"
-                                                        class="select-all fa-fw fa-lg fas"></span>
-                                                </a>
-                                            </div>
-                                        @endif
-
                                         <div class="me-2">
                                             <a data-bs-toggle="modal"
                                                 data-bs-target="#receipt-details-{{ $receipt->id_book_receipt }}"

@@ -80,6 +80,17 @@ class RecBookReceiptSeeder extends Seeder
                 "created_by" => 1,
                 "created_at" => now(),
             ],
+            [
+                "id_book" => 2,
+                "id_user" => 6,
+                "amount" => 1,
+                "from_time" => now()->subDays(29)->format('Y-m-d'),
+                "to_time" => now()->subDays(22)->format('Y-m-d'),
+                "status" => "taken",
+                "date_returned" => null,
+                "created_by" => 1,
+                "created_at" => now(),
+            ],
         ]);
     }
 }

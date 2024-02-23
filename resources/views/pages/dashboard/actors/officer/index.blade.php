@@ -34,9 +34,14 @@
                             <div class="px-4 py-4 card-body">
                                 <div class="text-center">
                                     <div class="mb-3 avatar avatar-xl">
-                                        @if (auth()?->user()?->profile_picture)
-                                            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
-                                                alt="Avatar">
+                                        @if (auth()->user()->profile_picture)
+                                            @if (File::exists(public_path('assets/' . auth()->user()->profile_picture)))
+                                                <img src="{{ asset('assets/' . auth()->user()->profile_picture) }}"
+                                                    alt="{{ auth()->user()->full_name }}" />
+                                            @else
+                                                <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
+                                                    alt="Avatar">
+                                            @endif
                                         @else
                                             <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="Avatar">
                                         @endif
@@ -158,11 +163,16 @@
                                 data-bs-target="#receipt-details-{{ $receipt->id_book_receipt }}">
                                 <div class="px-4 py-3 recent-message d-flex">
                                     <div class="avatar avatar-lg">
-                                        @if ($receipt->user->profile_picture)
-                                            <img src="{{ asset('storage/' . $receipt->user->profile_picture) }}"
-                                                alt="Avatar">
+                                        @if ($review->user->profile_picture)
+                                            @if (File::exists(public_path('assets/' . $review->user->profile_picture)))
+                                                <img src="{{ asset('assets/' . $review->user->profile_picture) }}"
+                                                    alt="User Avatar" alt="User Avatar" />
+                                            @else
+                                                <img src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                                                    alt="User Avatar" />
+                                            @endif
                                         @else
-                                            <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="Avatar">
+                                            <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />
                                         @endif
                                     </div>
                                     <div class="name ms-4">
@@ -241,11 +251,16 @@
                                             <div class="col-3 col-md-1">
                                                 <div class="mb-3 avatar avatar-lg w-100">
                                                     @if ($review->user->profile_picture)
-                                                        <img src="{{ asset('storage/' . $review->user->profile_picture) }}"
-                                                            alt="Avatar">
+                                                        @if (File::exists(public_path('assets/' . $review->user->profile_picture)))
+                                                            <img src="{{ asset('assets/' . $review->user->profile_picture) }}"
+                                                                alt="User Avatar" alt="User Avatar" />
+                                                        @else
+                                                            <img src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                                                                alt="User Avatar" />
+                                                        @endif
                                                     @else
                                                         <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
-                                                            alt="Avatar">
+                                                            alt="User Avatar" />
                                                     @endif
                                                 </div>
                                             </div>

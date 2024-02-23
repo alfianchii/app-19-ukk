@@ -101,8 +101,14 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     @if ($user->profile_picture)
-                                        <img class="rounded" width="100"
-                                            src="{{ asset('storage/' . $user->profile_picture) }}" alt="User Avatar" />
+                                        @if (File::exists(public_path('assets/' . $user->profile_picture)))
+                                            <img class="rounded" width="100"
+                                                src="{{ asset('assets/' . $user->profile_picture) }}" alt="User Avatar"
+                                                alt="User Avatar" />
+                                        @else
+                                            <img class="rounded" width="100"
+                                                src="{{ asset('storage/' . $user->profile_picture) }}" alt="User Avatar" />
+                                        @endif
                                     @else
                                         <img class="rounded" width="100"
                                             src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />

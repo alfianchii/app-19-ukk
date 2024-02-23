@@ -41,11 +41,16 @@
             <div class="card-body">
                 <div class="mb-3 d-flex justify-content-center align-items-center flex-column">
                     @if ($user->profile_picture)
-                        <img width="150" class="rounded-circle" src="{{ asset('storage/' . $user->profile_picture) }}"
-                            alt="User Avatar">
+                        @if (File::exists(public_path('assets/' . $user->profile_picture)))
+                            <img class="rounded-circle" width="150" src="{{ asset('assets/' . $user->profile_picture) }}"
+                                alt="User Avatar" alt="User Avatar" />
+                        @else
+                            <img class="rounded-circle" width="150"
+                                src="{{ asset('storage/' . $user->profile_picture) }}" alt="User Avatar" />
+                        @endif
                     @else
-                        <img width="150" class="rounded-circle" src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
-                            alt="User Avatar">
+                        <img class="rounded-circle" width="150" src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
+                            alt="User Avatar" />
                     @endif
 
                     <h4 class="mt-4">{{ $user->full_name }}</h4>

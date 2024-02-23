@@ -24,5 +24,4 @@ const shapesBig = (attribute, upPath, downPath) => {
     downShape.setAttribute(attribute, downPath);
 };
 
-shapesChangeSize();
-window.onresize = () => shapesChangeSize();
+export default shapesChangeSize;

@@ -20,9 +20,14 @@
                             </div>
                             <div class="user-img d-flex align-items-center">
                                 <div class="avatar avatar-md">
-                                    @if (auth()?->user()?->profile_picture)
-                                        <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
-                                            alt="Avatar">
+                                    @if (auth()->user()->profile_picture)
+                                        @if (File::exists(public_path('assets/' . auth()->user()->profile_picture)))
+                                            <img src="{{ asset('assets/' . auth()->user()->profile_picture) }}"
+                                                alt="{{ auth()->user()->full_name }}" />
+                                        @else
+                                            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
+                                                alt="Avatar">
+                                        @endif
                                     @else
                                         <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="Avatar">
                                     @endif

@@ -34,9 +34,14 @@
                             <div class="px-4 py-4 card-body">
                                 <div class="text-center">
                                     <div class="mb-3 avatar avatar-xl">
-                                        @if (auth()?->user()?->profile_picture)
-                                            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
-                                                alt="Avatar">
+                                        @if (auth()->user()->profile_picture)
+                                            @if (File::exists(public_path('assets/' . auth()->user()->profile_picture)))
+                                                <img src="{{ asset('assets/' . auth()->user()->profile_picture) }}"
+                                                    alt="{{ auth()->user()->full_name }}" />
+                                            @else
+                                                <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
+                                                    alt="Avatar">
+                                            @endif
                                         @else
                                             <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="Avatar">
                                         @endif
@@ -53,101 +58,7 @@
                     </div>
                 </div>
                 <div class="row user-select-none">
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <a style="cursor: pointer" onclick="window.location.href='/dashboard/users'">
-                            <div class="card">
-                                <div class="px-4 card-body py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                            <div class="mb-2 stats-icon" style="background-color: #ffbe55;">
-                                                <i class="iconly-boldUser1"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="font-semibold text-muted">
-                                                User
-                                            </h6>
-                                            <h6 class="mb-0 font-extrabold">
-                                                {{ $usersCount }}
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <a style="cursor: pointer" onclick="window.location.href='/dashboard/users?data=non-active'">
-                            <div class="card">
-                                <div class="px-4 card-body py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                            <div class="mb-2 stats-icon" style="background-color: #6574ff;">
-                                                <i class="iconly-boldHide"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="font-semibold text-muted">
-                                                Non-active
-                                            </h6>
-                                            <h6 class="mb-0 font-extrabold">
-                                                {{ $inactiveUsersCount }}
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <a style="cursor: pointer" onclick="window.location.href='/dashboard/users?status=officer'">
-                            <div class="card">
-                                <div class="px-4 card-body py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                            <div class="mb-2 stats-icon" style="background-color: #ff66cc;">
-                                                <i class="iconly-boldAdd-User"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="font-semibold text-muted">
-                                                Officer
-                                            </h6>
-                                            <h6 class="mb-0 font-extrabold">
-                                                {{ $officersCount }}
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <a style="cursor: pointer" onclick="window.location.href='/dashboard/users?status=reader'">
-                            <div class="card">
-                                <div class="px-4 card-body py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                            <div class="mb-2 stats-icon" style="background-color: #ff6677;">
-                                                <i class="iconly-boldProfile"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="font-semibold text-muted">
-                                                Reader
-                                            </h6>
-                                            <h6 class="mb-0 font-extrabold">
-                                                {{ $readersCount }}
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="row user-select-none">
-                    <div class="col-6 col-lg-3 col-md-6">
+                    <div class="col-6 col-lg-6 col-md-6">
                         <a style="cursor: pointer" onclick="window.location.href='/dashboard/receipts'">
                             <div class="card">
                                 <div class="px-4 card-body py-4-5">
@@ -216,29 +127,6 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <a style="cursor: pointer" onclick="window.location.href='/dashboard/genres'">
-                            <div class="card">
-                                <div class="px-4 card-body py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                            <div class="mb-2 stats-icon green">
-                                                <i class="iconly-boldLogin"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="font-semibold text-muted">
-                                                Genre
-                                            </h6>
-                                            <h6 class="mb-0 font-extrabold">
-                                                {{ $genresCount }}
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
                 </div>
             </div>
             <div class="col-12 col-lg-3">
@@ -253,16 +141,21 @@
                                 <div class="px-4 py-3 recent-message d-flex">
                                     <div class="avatar avatar-lg">
                                         @if ($receipt->user->profile_picture)
-                                            <img src="{{ asset('storage/' . $receipt->user->profile_picture) }}"
-                                                alt="Avatar">
+                                            @if (File::exists(public_path('assets/' . $receipt->user->profile_picture)))
+                                                <img src="{{ asset('assets/' . $receipt->user->profile_picture) }}"
+                                                    alt="User Avatar" alt="User Avatar" />
+                                            @else
+                                                <img src="{{ asset('storage/' . $receipt->user->profile_picture) }}"
+                                                    alt="User Avatar" />
+                                            @endif
                                         @else
-                                            <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="Avatar">
+                                            <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}" alt="User Avatar" />
                                         @endif
                                     </div>
                                     <div class="name ms-4">
-                                        <h5 class="mb-1">{{ $receipt->user->full_name }}</h5>
+                                        <h5 class="mb-1">{{ $receipt->book->title }}</h5>
                                         <h6 class="mb-0 text-muted">
-                                            {{ htmlspecialchars('@' . $receipt->user->username) }}
+                                            {{ '#' . $receipt->id_book_receipt }}
                                         </h6>
                                     </div>
                                 </div>
@@ -335,11 +228,16 @@
                                             <div class="col-3 col-md-1">
                                                 <div class="mb-3 avatar avatar-lg w-100">
                                                     @if ($review->user->profile_picture)
-                                                        <img src="{{ asset('storage/' . $review->user->profile_picture) }}"
-                                                            alt="Avatar">
+                                                        @if (File::exists(public_path('assets/' . $review->user->profile_picture)))
+                                                            <img src="{{ asset('assets/' . $review->user->profile_picture) }}"
+                                                                alt="User Avatar" alt="User Avatar" />
+                                                        @else
+                                                            <img src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                                                                alt="User Avatar" />
+                                                        @endif
                                                     @else
                                                         <img src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
-                                                            alt="Avatar">
+                                                            alt="User Avatar" />
                                                     @endif
                                                 </div>
                                             </div>

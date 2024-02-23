@@ -42,7 +42,7 @@ class BookController extends Controller
 
     public function wishlist(MasterBook $book, Request $request)
     {
-        $user = Auth::user();
+        $theUser = Auth::user();
 
         $credentials = $request->validate(["id_book_wishlist" => "nullable"]);
         $message = '';
@@ -52,7 +52,7 @@ class BookController extends Controller
             $message = "Book has been removed from your wishlist!";
         } else {
             $fields = [
-                "id_user" => $user->id_user,
+                "id_user" => $theUser->id_user,
                 "id_book" => $book->id_book,
             ];
             HistoryBookWishlist::create($fields);

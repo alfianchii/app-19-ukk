@@ -97,9 +97,15 @@
                             <div class="flex-shrink-0 w-full px-4 mb-6 md:w-5/12 lg:w-3/12 md:mb-0">
                                 <a class="relative inline-block w-full" href="/books/{{ $book->id_book }}">
                                     @if ($book->cover)
-                                        <img alt="{{ $book->title }}" loading="lazy" decoding="async"
-                                            class="mx-auto rounded-lg md:mx-0" src="{{ asset('storage/' . $book->cover) }}"
-                                            width="200">
+                                        @if (File::exists(public_path('assets/' . $book->cover)))
+                                            <img src="{{ asset('assets/' . $book->cover) }}" alt="{{ $book->title }}"
+                                                loading="lazy" decoding="async" class="mx-auto rounded-lg md:mx-0"
+                                                width="200" />
+                                        @else
+                                            <img src="{{ asset('storage/' . $book->cover) }}" alt="{{ $book->title }}"
+                                                loading="lazy" decoding="async" class="mx-auto rounded-lg md:mx-0"
+                                                width="200" />
+                                        @endif
                                     @else
                                         <img alt="{{ $book->title }}" loading="lazy" decoding="async"
                                             class="mx-auto rounded-lg md:mx-0" src="{{ asset('assets/no-image-y.png') }}"

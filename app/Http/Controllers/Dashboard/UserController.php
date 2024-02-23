@@ -234,7 +234,7 @@ class UserController extends Controller
             }
         };
 
-        if ($theUser->role == "student") {
+        if ($theUser->role == "reader") {
             if ($theUser->id_user === $user->id_user) {
                 unset(
                     $this->rules["nik"],

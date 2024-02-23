@@ -65,12 +65,14 @@
                     </li>
                 @endcan
 
-                <li class="sidebar-item @if (Request::is('dashboard/books*')) active @endif">
-                    <a href="/dashboard/books" class='sidebar-link'>
-                        <i class="bi bi-book"></i>
-                        <span>Book</span>
-                    </a>
-                </li>
+                @canany(['admin', 'officer'])
+                    <li class="sidebar-item @if (Request::is('dashboard/books*')) active @endif">
+                        <a href="/dashboard/books" class='sidebar-link'>
+                            <i class="bi bi-book"></i>
+                            <span>Book</span>
+                        </a>
+                    </li>
+                @endcanany
                 <li class="sidebar-item @if (Request::is('dashboard/receipts*')) active @endif">
                     <a href="/dashboard/receipts" class='sidebar-link'>
                         <i class="bi bi-ticket-detailed"></i>

@@ -16,7 +16,7 @@ class DashboardController extends Controller
     // CORES
     public function index()
     {
-        $user = Auth::user();
+        $theUser = Auth::user();
 
         $greeting = "";
         $time = now()->hour;
@@ -26,7 +26,7 @@ class DashboardController extends Controller
         else $greeting = "Good night";
 
         // Admin
-        if ($user->role === "admin") {
+        if ($theUser->role === "admin") {
             $usersCount = User::all()->count();
             $inactiveUsersCount = User::all()->where('flag_active', "N")->count();
             $officersCount = User::all()->where('role', "officer")->count();
@@ -57,7 +57,7 @@ class DashboardController extends Controller
         }
 
         // Officer
-        if ($user->role === "officer") {
+        if ($theUser->role === "officer") {
             $officersCount = User::all()->where('role', "officer")->count();
             $readersCount = User::all()->where('role', "reader")->count();
             $receiptsCount = RecBookReceipt::all()->count();
@@ -80,13 +80,13 @@ class DashboardController extends Controller
         }
 
         // Reader
-        if ($user->role === "reader") {
-            $receiptsCount = RecBookReceipt::where("id_user", $user->id_user)->count();
-            $reviewsCount = RecBookReview::where("id_user", $user->id_user)->count();
-            $wishlistsCount = HistoryBookWishlist::where("id_user", $user->id_user)->count();
+        if ($theUser->role === "reader") {
+            $receiptsCount = RecBookReceipt::where("id_user", $theUser->id_user)->count();
+            $reviewsCount = RecBookReview::where("id_user", $theUser->id_user)->count();
+            $wishlistsCount = HistoryBookWishlist::where("id_user", $theUser->id_user)->count();
 
-            $receipts = RecBookReceipt::with(["user"])->where("id_user", $user->id_user)->latest()->limit(3)->get();
-            $reviews = RecBookReview::with(["user"])->where('id_user', $user->id_user)->latest()->paginate(3);
+            $receipts = RecBookReceipt::with(["user"])->where("id_user", $theUser->id_user)->latest()->limit(3)->get();
+            $reviews = RecBookReview::with(["user"])->where('id_user', $theUser->id_user)->latest()->paginate(3);
 
             $viewVariables = [
                 "title" => "Dashboard",

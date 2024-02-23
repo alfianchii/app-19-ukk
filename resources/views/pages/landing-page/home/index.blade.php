@@ -42,21 +42,21 @@
 
         {{-- Books --}}
         <div class="relative hidden xl:block">
-            <div class="absolute left-0 top-48">
-                <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/Dompet Ayah Sepatu Ibu.png') }}"
-                    alt="Dompet Ayah Sepatu Ibu">
+            <div class="absolute transition-all left-0 top-48">
+                <img width="210" class="transition-all duration-300 hover:drop-shadow-none rounded-lg drop-shadow-2xl"
+                    src="{{ asset('assets/images/Dompet Ayah Sepatu Ibu.png') }}" alt="Dompet Ayah Sepatu Ibu">
             </div>
-            <div class="absolute top-0 xl:right-52 min-[1850px]:right-[450px]">
-                <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/Talking to Strangers.png') }}"
-                    alt="Talking to Strangers">
+            <div class="absolute transition-all top-0 xl:right-56 min-[1830px]:right-[400px]">
+                <img width="150" class="transition-all duration-300 hover:drop-shadow-none rounded-lg drop-shadow-2xl"
+                    src="{{ asset('assets/images/Talking to Strangers.png') }}" alt="Talking to Strangers">
             </div>
-            <div class="absolute right-0 top-28">
-                <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/Laut Bercerita.png') }}"
-                    alt="Laut Bercerita">
+            <div class="absolute transition-all right-0 top-28">
+                <img width="150"class="transition-all duration-300 hover:drop-shadow-none rounded-lg drop-shadow-2xl"
+                    src="{{ asset('assets/images/Laut Bercerita.png') }}" alt="Laut Bercerita">
             </div>
-            <div class="absolute xl:right-40 2xl:right-64 top-[350px]">
-                <img class="rounded-lg drop-shadow-2xl" src="{{ asset('assets/images/The Visual MBA.png') }}"
-                    alt="The Visual MBA">
+            <div class="absolute transition-all xl:right-40 2xl:right-64 top-[330px]">
+                <img width="110" class="transition-all duration-300 hover:drop-shadow-none rounded-lg drop-shadow-2xl"
+                    src="{{ asset('assets/images/The Visual MBA.png') }}" alt="The Visual MBA">
             </div>
         </div>
     </div>
@@ -149,13 +149,13 @@
 
     <div class="mt-[90px] grid grid-cols-1 lg:grid-cols-2">
         <div
-            class="flex flex-col items-center justify-center lg:flex-row lg:items-start lg:justify-start order-first mb-12 lg:mb-0 drop-shadow-2xl">
+            class="flex flex-col items-center justify-center lg:flex-row lg:items-start lg:justify-start order-first mb-12 lg:mb-0 drop-shadow-2xl transition-all duration-300 hover:drop-shadow-none">
             <img class="rounded-lg" src="{{ asset('assets/images/Service.png') }}" alt="Service">
         </div>
 
         <div class="lg:ps-[150px] text-center lg:text-end order-last">
             <h4 class="text-[32px] font-medium text-midnight-blue"><span class="text-dodger-blue">Rent</span> your
-                favorite book fairly easy on <span class="text-dodger-blue">Lidia</span>!</h4>
+                favorite <span class="text-dodger-blue">book</span> fairly easy on Lidia!</h4>
             <p class="mt-10 leading-8 text-slate-grey">Viewing, rent, and organize your favorite books has
                 never been easier. An integrated digital library rent
                 that’s simple to use, Lidia lets you spend less time
@@ -176,7 +176,7 @@
         </div>
 
         <div
-            class="flex flex-col items-center justify-center lg:flex-row lg:items-end lg:justify-end order-first mb-12 lg:order-last drop-shadow-2xl lg:mb-0">
+            class="flex flex-col items-center justify-center lg:flex-row lg:items-end lg:justify-end order-first mb-12 lg:order-last drop-shadow-2xl lg:mb-0 transition-all duration-300 hover:drop-shadow-none">
             <img class="rounded-lg" src="{{ asset('assets/images/Reading.png') }}" alt="Service">
         </div>
     </div>
@@ -196,13 +196,21 @@
                     <div class="flex mb-4">
                         <div class="p-6 rounded-3xl">
                             @if ($review->user->profile_picture)
-                                <img width="150px" class="rounded-full"
-                                    src="{{ asset('storage/' . $review->user->profile_picture) }}"
-                                    alt="{{ $review->user->full_name }}">
+                                @if (File::exists(public_path('assets/' . $review->user->profile_picture)))
+                                    <img class="rounded-full"
+                                        src="{{ asset('assets/' . $review->user->profile_picture) }}"
+                                        alt="{{ $review->user->full_name }}" loading="lazy" decoding="async"
+                                        width="150px" />
+                                @else
+                                    <img class="rounded-full"
+                                        src="{{ asset('storage/' . $review->user->profile_picture) }}"
+                                        alt="{{ $review->user->full_name }}" loading="lazy" decoding="async"
+                                        width="150px" />
+                                @endif
                             @else
-                                <img width="150px" class="rounded-full"
-                                    src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
-                                    alt="{{ $review->user->full_name }}">
+                                <img class="rounded-full" alt="{{ $review->user->full_name }}" loading="lazy"
+                                    decoding="async" src="{{ asset('mazer/assets/compiled/jpg/1.jpg') }}"
+                                    width="150px">
                             @endif
                         </div>
                     </div>
@@ -303,5 +311,4 @@
 @endsection
 
 @section('additional_scripts')
-    @vite('resources/js/base/shapes.js')
 @endsection
