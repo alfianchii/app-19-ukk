@@ -29,7 +29,9 @@ class AuthController extends Controller
     {
         $credentials = $request->validate($this->rules);
         $user = User::firstWhere("username", $credentials["username"]);
-        if ($user->flag_active === "N" or $user->deleted_at) return back()->with("error", "Your account has been blocked!");
+
+        if ($user)
+            if ($user->flag_active === "N" or $user->deleted_at) return back()->with("error", "Your account has been blocked!");
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();

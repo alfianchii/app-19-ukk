@@ -206,8 +206,8 @@
                             </div>
                         @empty
                             <div class="px-4 py-3 recent-message d-flex">
-                                <div class="alert alert-warning" role="alert">
-                                    <h4 class="alert-heading">No receipt :(</h4>
+                                <div class="alert alert-warning w-100" role="alert">
+                                    <h4 class="alert-heading text-center">No receipt :(</h4>
                                 </div>
                             </div>
                         @endforelse

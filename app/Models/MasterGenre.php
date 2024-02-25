@@ -23,4 +23,18 @@ class MasterGenre extends Model
     {
         return $this->belongsToMany(MasterGenre::class, 'dt_book_genres', 'id_genre', 'id_book');
     }
+
+    public function scopeFilter($query, $filters)
+    {
+        // SEARCH: GENRE
+        $query->when(
+            $filters["search"] ?? false,
+            fn ($query, $search) =>
+            $query->whereHas(
+                "books",
+                fn ($query) => $query->where('mst_genres.name', $search)
+            )
+                ->get()
+        );
+    }
 }

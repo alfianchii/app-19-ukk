@@ -163,7 +163,7 @@
                                 data-bs-target="#receipt-details-{{ $receipt->id_book_receipt }}">
                                 <div class="px-4 py-3 recent-message d-flex">
                                     <div class="avatar avatar-lg">
-                                        @if ($review->user->profile_picture)
+                                        @if ($receipt->user->profile_picture)
                                             @if (File::exists(public_path('assets/' . $review->user->profile_picture)))
                                                 <img src="{{ asset('assets/' . $review->user->profile_picture) }}"
                                                     alt="User Avatar" alt="User Avatar" />
@@ -229,8 +229,8 @@
                             </div>
                         @empty
                             <div class="px-4 py-3 recent-message d-flex">
-                                <div class="alert alert-warning" role="alert">
-                                    <h4 class="alert-heading">No receipt :(</h4>
+                                <div class="alert alert-warning w-100" role="alert">
+                                    <h4 class="alert-heading text-center">No receipt :(</h4>
                                 </div>
                             </div>
                         @endforelse

@@ -44,7 +44,7 @@
 
         <section class="pt-20">
             <div class="flex flex-col items-start justify-center w-full mb-8 gap-y-6">
-                <form class="flex items-center justify-center w-full" action="/books" method="GET">
+                <form class="flex items-center justify-center w-full" action="/genres" method="GET">
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">✏️</div>
                         <input type="text" id="simple-search"
