@@ -44,5 +44,7 @@ class AppServiceProvider extends ServiceProvider
             fn (User $user) =>
             $user->role == "reader"
         );
+
+        if(env('APP_ENV') !== 'local') URL::forceScheme('https');
     }
 }
