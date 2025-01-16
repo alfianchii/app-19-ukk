@@ -161,7 +161,7 @@ return [
          */
         Maatwebsite\Excel\ExcelServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
-        env('APP_ENV') === 'local' ? Barryvdh\Debugbar\ServiceProvider::class : null,
+        env('APP_ENV') === 'local' ? Barryvdh\Debugbar\ServiceProvider::class : "",
         Intervention\Image\ImageServiceProvider::class,
 
         /*
