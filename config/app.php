@@ -3,6 +3,30 @@
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
+$laravelDebugBar = [
+    Barryvdh\Debugbar\ServiceProvider::class,
+];
+
+$providers = [
+    /*
+        * Package Service Providers...
+        */
+    Maatwebsite\Excel\ExcelServiceProvider::class,
+    RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+    Intervention\Image\ImageServiceProvider::class,
+
+    /*
+        * Application Service Providers...
+        */
+    App\Providers\AppServiceProvider::class,
+    App\Providers\AuthServiceProvider::class,
+    // App\Providers\BroadcastServiceProvider::class,
+    App\Providers\EventServiceProvider::class,
+    App\Providers\RouteServiceProvider::class,
+];
+
+if (env('APP_DEBUG') && env('APP_ENV') === 'local') $providers = array_merge($providers, $laravelDebugBar);
+
 return [
 
     /*
@@ -155,24 +179,7 @@ return [
     |
     */
 
-    'providers' => ServiceProvider::defaultProviders()->merge([
-        /*
-         * Package Service Providers...
-         */
-        Maatwebsite\Excel\ExcelServiceProvider::class,
-        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
-        env('APP_ENV') === 'local' ? Barryvdh\Debugbar\ServiceProvider::class : "",
-        Intervention\Image\ImageServiceProvider::class,
-
-        /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-    ])->toArray(),
+    'providers' => ServiceProvider::defaultProviders()->merge($providers)->toArray(),
 
     /*
     |--------------------------------------------------------------------------
