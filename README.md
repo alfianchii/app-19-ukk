@@ -169,19 +169,83 @@ docker compose run --rm --service-ports npm run dev
 <h4 id="docker-commands">🔐 Commands</h4>
 
 -   Composer
--   -   `docker-compose run --rm composer install`
--   -   `docker-compose run --rm composer require laravel/breeze --dev`
+-   -   `docker compose run --rm composer install`
+-   -   `docker compose run --rm composer require laravel/breeze --dev`
 -   -   Etc
 
 -   NPM
--   -   `docker-compose run --rm npm install`
--   -   `docker-compose run --rm --service-ports npm run dev`
+-   -   `docker compose run --rm npm install`
+-   -   `docker compose run --rm --service-ports npm run dev`
 -   -   Etc
 
 -   Artisan
--   -   `docker-compose run --rm artisan serve`
--   -   `docker-compose run --rm artisan route:list`
+-   -   `docker compose run --rm artisan serve`
+-   -   `docker compose run --rm artisan route:list`
 -   -   Etc
+
+<h2 id="production">🌐 Production</h2>
+
+<h3 id="deployment-docker-vps">🐳 Deployment w/ Docker (use Virtual Private Server)</h3>
+
+-   Clone the repository w/ SSH method `git clone git@github.com:alfianchii/app-19-ukk` and go to the directory with `cd app-19-ukk` command.
+
+-   Copy `.env.example` file to `.env` and do configs.
+
+```conf
+# App
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=127.0.0.1
+APP_PORT=8002
+
+# DB
+DB_HOST=mariadb
+DB_DATABASE=db_19_ukk
+DB_USERNAME=your-vps-username
+DB_PASSWORD=your-vps-password
+```
+-   Let's build with `docker compose -f ./docker-compose.prod.yaml up -d --build` command.
+
+-   Install its dependencies.
+
+```bash
+docker compose -f ./docker-compose.prod.yaml run --rm composer install --optimize-autoloader --no-dev
+docker compose -f ./docker-compose.prod.yaml run --rm npm install
+```
+
+-   Build the assets with dockerized Vite.js command: `docker compose -f ./docker-compose.prod.yaml run --rm npm run build`.
+
+-   Do Laravel setups with existing Docker's custom command: `docker compose -f ./docker-compose.prod.yaml run --rm laravel-setup`.
+
+- Setup your domain and SSL certificate with Nginx configuration:
+
+```nginx
+server {
+  server_name your-domain.com www.your-domain.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:8002;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  error_log /var/log/nginx/your-domain_error.log;
+  access_log /var/log/nginx/your-domain_access.log;
+}
+```
+
+- Setup SSL certificate with Certbot:
+
+```bash
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+sudo ln -s /etc/nginx/sites-available/your-domain.com /etc/nginx/sites-enabled/
+sudo systemctl reload nginx
+```
+
+-   Congrats! Your app is ready to be served. You can access it on your domain and with HTTPS protocol~
 
 <h2 id="pembuat">🧍 Author</h2>
 
